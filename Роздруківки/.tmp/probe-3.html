@@ -1,0 +1,53 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><title>probe</title><style>
+@page { size: A4; margin: 12mm 12mm 12mm 12mm;
+        @bottom-center {
+          content: counter(page) " / " counter(pages);
+          font-family: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+          font-size: 8.5pt; color: #555; } }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+       color: #000; }
+.page { page-break-after: always; }
+.page:last-child { page-break-after: auto; }
+.hdr { border-bottom: 1.6pt solid #000; padding-bottom: 2mm; margin-bottom: 3mm; }
+.hdr .cls { font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.hdr .ttl { font-weight: 700; margin-top: .6mm; }
+.hdr .sub { margin-top: .8mm; }
+.name { float: right; font-weight: 400; }
+h2, h3, h4 { margin: 2.6mm 0 1.2mm; page-break-after: avoid; }
+h2 { font-size: 1.12em; } h3 { font-size: 1.06em; } h4 { font-size: 1em; }
+p { margin: 0 0 1.4mm; }
+p.task { margin-top: 3.4mm; page-break-after: avoid; }
+.page > p.task:first-of-type { margin-top: 0; }
+ul, ol { margin: 0 0 1.6mm; padding-left: 5.5mm; }
+li { margin-bottom: .5mm; }
+table { border-collapse: collapse; width: 100%; margin: 1.4mm 0 2.2mm;
+        page-break-inside: avoid; }
+th, td { border: .6pt solid #444; padding: 1mm 1.4mm; text-align: left;
+         vertical-align: top; }
+th { background: #eee; font-weight: 700; }
+pre { border: .6pt solid #888; background: #f6f6f6; padding: 1.2mm 1.8mm;
+      margin: 1.2mm 0 1.8mm; white-space: pre-wrap;
+      font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .92em;
+      page-break-inside: avoid; }
+code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .94em; }
+blockquote { margin: 1.2mm 0 1.8mm; padding-left: 2.4mm;
+             border-left: 1.4pt solid #999; }
+strong { font-weight: 700; }
+</style></head><body>
+<div class="page" style="font-size:13.0pt; line-height:1.22">
+  <div class="hdr"><div class="cls">6 клас · Урок І-03</div><div class="ttl">БЖД. Етапи створення комп'ютерної презентації</div><div class="sub">Практичні завдання в зошиті</div></div>
+<p class="task"><strong>Завдання 1. Розкадровка.</strong></p>
+<p>Накресліть у зошиті 5 прямокутників — це слайди майбутньої презентації «Моє хобі». Пронумеруйте їх. У кожному напишіть заголовок і 2-3 короткі рядки того, що там буде. Позначте хрестиком місця, де стоятимуть зображення. Над розкадровкою запишіть мету презентації та її аудиторію.</p>
+<p class="task"><strong>Завдання 2. Виправ невдалий слайд.</strong></p>
+<p>Ось як виглядає слайд, зроблений без планування:</p>
+<blockquote><p><strong>Слайд 3</strong> <em>Заголовок:</em> Інформація <em>Текст:</em> Мій собака породи джек-рассел-тер'єр, йому три роки, я взяв його в притулку в місті Львові два роки тому, коли мені було десять років, і з того часу ми з ним гуляємо щодня вранці й увечері, він дуже любить бігати за м'ячиком, а ще він уміє давати лапу, сидіти й лежати за командою, а взимку ми разом ходимо в парк, де він дуже любить сніг і бігає по кучугурах, а влітку ми їздимо до бабусі в село.</p></blockquote>
+<p>Знайдіть і випишіть у зошит <strong>чотири помилки</strong> цього слайда. Потім перепишіть його правильно: новий заголовок і не більше трьох коротких рядків. Решту допишіть окремо як «що я скажу голосом».</p>
+<p class="task"><strong>Завдання 3. Слайд «Джерела».</strong></p>
+<p>Учениця зібрала для презентації «Мій кіт» такі матеріали. Перепишіть список у зошит і біля кожного напишіть <strong>«своє»</strong> або <strong>«чуже»</strong>, а для чужого — що з ним треба зробити.</p>
+<ol><li>Фото свого кота, зняте на телефон.</li><li>Малюнок кота, скопійований із сайту художника.</li><li>Таблиця «Скільки сплять коти», знайдена в статті ветеринарної клініки.</li><li>Опитування однокласників «Хто має вдома кота».</li><li>Відео з YouTube, де кіт збиває чашку зі столу.</li><li>Текст про породу, переписаний з Вікіпедії слово в слово.</li></ol>
+<p>Далі оформіть у зошиті останній слайд презентації: заголовок <code>Джерела</code> і під ним список того, що треба туди внести. Замість посилань пишіть коротко, звідки взято, наприклад <code>Таблиця — сайт ветклініки</code>.</p>
+<p class="task"><strong>Завдання 4. Постав по порядку.</strong></p>
+<p>Перепишіть дії в правильному порядку й позначте, до якого з чотирьох етапів належить кожна: а) обираю макет для кожного слайда б) вирішую, що презентація для однокласників, а не для вчителів в) набираю текст на слайді г) фотографую свою колекцію ґ) записую посилання на сайт, звідки взяв малюнок д) вирішую, що слайдів буде п'ять і про що кожен.</p>
+</div>
+</body></html>

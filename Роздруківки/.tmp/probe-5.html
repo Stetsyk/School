@@ -1,0 +1,79 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><title>probe</title><style>
+@page { size: A4; margin: 12mm 12mm 12mm 12mm;
+        @bottom-center {
+          content: counter(page) " / " counter(pages);
+          font-family: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+          font-size: 8.5pt; color: #555; } }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+       color: #000; }
+.page { page-break-after: always; }
+.page:last-child { page-break-after: auto; }
+.hdr { border-bottom: 1.6pt solid #000; padding-bottom: 2mm; margin-bottom: 3mm; }
+.hdr .cls { font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.hdr .ttl { font-weight: 700; margin-top: .6mm; }
+.hdr .sub { margin-top: .8mm; }
+.name { float: right; font-weight: 400; }
+h2, h3, h4 { margin: 2.6mm 0 1.2mm; page-break-after: avoid; }
+h2 { font-size: 1.12em; } h3 { font-size: 1.06em; } h4 { font-size: 1em; }
+p { margin: 0 0 1.4mm; }
+p.task { margin-top: 3.4mm; page-break-after: avoid; }
+.page > p.task:first-of-type { margin-top: 0; }
+ul, ol { margin: 0 0 1.6mm; padding-left: 5.5mm; }
+li { margin-bottom: .5mm; }
+table { border-collapse: collapse; width: 100%; margin: 1.4mm 0 2.2mm;
+        page-break-inside: avoid; }
+th, td { border: .6pt solid #444; padding: 1mm 1.4mm; text-align: left;
+         vertical-align: top; }
+th { background: #eee; font-weight: 700; }
+pre { border: .6pt solid #888; background: #f6f6f6; padding: 1.2mm 1.8mm;
+      margin: 1.2mm 0 1.8mm; white-space: pre-wrap;
+      font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .92em;
+      page-break-inside: avoid; }
+code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .94em; }
+blockquote { margin: 1.2mm 0 1.8mm; padding-left: 2.4mm;
+             border-left: 1.4pt solid #999; }
+strong { font-weight: 700; }
+</style></head><body>
+<div class="page" style="font-size:8.0pt; line-height:1.22">
+  <div class="hdr"><div class="cls">7 клас · Урок І-12</div><div class="ttl">Команда присвоювання. Типи змінних величин</div><div class="sub">Практичні завдання в зошиті</div></div>
+<p class="task"><strong>Завдання 1. Лінійний запис.</strong></p>
+<p>Перепишіть математичні вирази так, як їх треба записати в Python:</p>
+<ol><li>3·x + 5</li><li>a² + b²</li><li>дріб: чисельник (a + b), знаменник (a − b)</li><li>2·π·r (замість π взяти 3.14)</li><li>дріб: чисельник (x − 1), знаменник 2·y</li></ol>
+<p class="task"><strong>Завдання 2. Що виведе програма.</strong></p>
+<p>Простежте виконання кожного фрагмента по рядках і запишіть, що з'явиться на екрані:</p>
+<p>а)</p>
+<pre>x = 4
+y = 3
+x = x + y
+print(x)</pre>
+<p>б)</p>
+<pre>a = 10
+b = a
+a = 2
+print(a, b)</pre>
+<p>в)</p>
+<pre>n = 5
+n = n * n
+n = n - 5
+print(n)</pre>
+<p class="task"><strong>Завдання 3. Таблиця значень.</strong></p>
+<p>Простежте програму по рядках і заповніть у зошиті таблицю: що лежить у кожній змінній <strong>після</strong> виконання кожного рядка. Порожню клітинку ставте, якщо змінної ще не існує.</p>
+<pre>a = 5
+b = 2
+a = a + b
+b = a * b
+a = a - 1
+print(a, b)</pre>
+<table><thead><tr><th>Рядок</th><th>a</th><th>b</th></tr></thead><tbody><tr><td>1</td><td></td><td></td></tr><tr><td>2</td><td></td><td></td></tr><tr><td>3</td><td></td><td></td></tr><tr><td>4</td><td></td><td></td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table>
+<p>Останнім рядком запишіть, що виведе <code>print</code>.</p>
+<p>Далі та сама робота для другої програми, але додайте третій стовпець — <strong>тип</strong> кожної змінної (int чи float):</p>
+<pre>ціна = 4.5
+кількість = 3
+сума = ціна * кількість
+print("До сплати:", сума)</pre>
+<p class="task"><strong>Завдання 4. Знайди помилку.</strong></p>
+<p>Перепишіть рядки й виправте ті, у яких є помилка. Поруч напишіть, у чому саме вона.</p>
+<ol><li><code>2клас = 5</code></li><li><code>моя оцінка = 10</code></li><li><code>12 = x</code></li><li><code>ціна = 25,50</code></li><li><code>X = 3</code> і наступним рядком <code>print(x)</code></li><li><code>S = 2a + b</code></li></ol>
+</div>
+</body></html>

@@ -1,0 +1,51 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><title>probe</title><style>
+@page { size: A4; margin: 12mm 12mm 12mm 12mm;
+        @bottom-center {
+          content: counter(page) " / " counter(pages);
+          font-family: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+          font-size: 8.5pt; color: #555; } }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+       color: #000; }
+.page { page-break-after: always; }
+.page:last-child { page-break-after: auto; }
+.hdr { border-bottom: 1.6pt solid #000; padding-bottom: 2mm; margin-bottom: 3mm; }
+.hdr .cls { font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.hdr .ttl { font-weight: 700; margin-top: .6mm; }
+.hdr .sub { margin-top: .8mm; }
+.name { float: right; font-weight: 400; }
+h2, h3, h4 { margin: 2.6mm 0 1.2mm; page-break-after: avoid; }
+h2 { font-size: 1.12em; } h3 { font-size: 1.06em; } h4 { font-size: 1em; }
+p { margin: 0 0 1.4mm; }
+p.task { margin-top: 3.4mm; page-break-after: avoid; }
+.page > p.task:first-of-type { margin-top: 0; }
+ul, ol { margin: 0 0 1.6mm; padding-left: 5.5mm; }
+li { margin-bottom: .5mm; }
+table { border-collapse: collapse; width: 100%; margin: 1.4mm 0 2.2mm;
+        page-break-inside: avoid; }
+th, td { border: .6pt solid #444; padding: 1mm 1.4mm; text-align: left;
+         vertical-align: top; }
+th { background: #eee; font-weight: 700; }
+pre { border: .6pt solid #888; background: #f6f6f6; padding: 1.2mm 1.8mm;
+      margin: 1.2mm 0 1.8mm; white-space: pre-wrap;
+      font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .92em;
+      page-break-inside: avoid; }
+code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .94em; }
+blockquote { margin: 1.2mm 0 1.8mm; padding-left: 2.4mm;
+             border-left: 1.4pt solid #999; }
+strong { font-weight: 700; }
+</style></head><body>
+<div class="page" style="font-size:13.0pt; line-height:1.22">
+  <div class="hdr"><div class="cls">7 клас · Урок І-10-11</div><div class="ttl">Комп'ютерні програми. Мови програмування. Python та IDLE</div><div class="sub">Практичні завдання в зошиті</div></div>
+<p class="task"><strong>Завдання 1. Синтаксична помилка чи ні.</strong></p>
+<p>Перепишіть рядки в зошит, біля кожного поставте «+», якщо запис правильний, і «–», якщо є помилка. Біля кожного «–» напишіть, у чому саме помилка.</p>
+<ol><li><code>print("Добрий день")</code></li><li><code>print(Добрий день)</code></li><li><code>Print("Добрий день")</code></li><li><code>print("Добрий день"</code></li><li><code>print("Добрий день")))</code></li><li><code>prnt("Добрий день")</code></li></ol>
+<p class="task"><strong>Завдання 2. Порівняльна таблиця.</strong></p>
+<p>Накресліть таблицю на два стовпці — <em>Інтерпретатор</em> / <em>Компілятор</em> — і розподіліть по ній твердження:</p>
+<ul><li>перекладає всю програму одразу</li><li>перекладає по одній команді</li><li>створює готовий exe-файл</li><li>повідомляє про першу помилку і зупиняється</li><li>повідомляє про всі помилки відразу</li><li>програма виконується швидше</li><li>цей вид використовує Python</li></ul>
+<p class="task"><strong>Завдання 3. Проєкт на папері.</strong></p>
+<p>Запишіть у зошит програму з чотирьох команд <code>print</code>, яка виводить ваше ім'я, клас, улюблену гру й улюблений предмет. Стежте за лапками й дужками — це головне. Поруч підпишіть, у якому файлі ви б її зберегли (ім'я та розширення).</p>
+<p class="task"><strong>Завдання 4. Ви — транслятор.</strong></p>
+<p>Перекладіть побутовий алгоритм «розігріти піцу в мікрохвильовці» на мову, де дозволено рівно чотири команди: <code>ВЗЯТИ(що)</code>, <code>ПОКЛАСТИ(куди)</code>, <code>УВІМКНУТИ(що)</code>, <code>ЧЕКАТИ(скільки)</code>. Запишіть 5-7 команд по одній у рядок. Інших слів не існує, вигадувати не можна.</p>
+</div>
+</body></html>

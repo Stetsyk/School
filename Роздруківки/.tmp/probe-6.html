@@ -1,0 +1,52 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><title>probe</title><style>
+@page { size: A4; margin: 12mm 12mm 12mm 12mm;
+        @bottom-center {
+          content: counter(page) " / " counter(pages);
+          font-family: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+          font-size: 8.5pt; color: #555; } }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+       color: #000; }
+.page { page-break-after: always; }
+.page:last-child { page-break-after: auto; }
+.hdr { border-bottom: 1.6pt solid #000; padding-bottom: 2mm; margin-bottom: 3mm; }
+.hdr .cls { font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.hdr .ttl { font-weight: 700; margin-top: .6mm; }
+.hdr .sub { margin-top: .8mm; }
+.name { float: right; font-weight: 400; }
+h2, h3, h4 { margin: 2.6mm 0 1.2mm; page-break-after: avoid; }
+h2 { font-size: 1.12em; } h3 { font-size: 1.06em; } h4 { font-size: 1em; }
+p { margin: 0 0 1.4mm; }
+p.task { margin-top: 3.4mm; page-break-after: avoid; }
+.page > p.task:first-of-type { margin-top: 0; }
+ul, ol { margin: 0 0 1.6mm; padding-left: 5.5mm; }
+li { margin-bottom: .5mm; }
+table { border-collapse: collapse; width: 100%; margin: 1.4mm 0 2.2mm;
+        page-break-inside: avoid; }
+th, td { border: .6pt solid #444; padding: 1mm 1.4mm; text-align: left;
+         vertical-align: top; }
+th { background: #eee; font-weight: 700; }
+pre { border: .6pt solid #888; background: #f6f6f6; padding: 1.2mm 1.8mm;
+      margin: 1.2mm 0 1.8mm; white-space: pre-wrap;
+      font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .92em;
+      page-break-inside: avoid; }
+code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .94em; }
+blockquote { margin: 1.2mm 0 1.8mm; padding-left: 2.4mm;
+             border-left: 1.4pt solid #999; }
+strong { font-weight: 700; }
+</style></head><body>
+<div class="page" style="font-size:13.0pt; line-height:1.22">
+  <div class="hdr"><div class="cls">8 клас · Урок І-02</div><div class="ttl">Кодування текстових даних. Таблиці кодів символів</div><div class="sub">Практичні завдання в зошиті</div></div>
+<p>Скористайтеся фрагментом таблиць кодів символів:</p>
+<table><thead><tr><th>Літера</th><th>Windows-1251</th><th>Юнікод</th></tr></thead><tbody><tr><td>а</td><td>224</td><td>1072</td></tr><tr><td>в</td><td>226</td><td>1074</td></tr><tr><td>і</td><td>179</td><td>1110</td></tr><tr><td>к</td><td>234</td><td>1082</td></tr><tr><td>м</td><td>236</td><td>1084</td></tr><tr><td>н</td><td>237</td><td>1085</td></tr><tr><td>о</td><td>238</td><td>1086</td></tr><tr><td>с</td><td>241</td><td>1089</td></tr><tr><td>т</td><td>242</td><td>1090</td></tr></tbody></table>
+<p class="task"><strong>Завдання 1. Закодуй і декодуй.</strong></p>
+<p>а) Закодуйте слово <strong>кіт</strong> у Windows-1251 і в Юнікоді. б) Закодуйте слово <strong>вісім</strong> у Юнікоді. в) Декодуйте за Windows-1251: <code>241 242 238</code> г) Декодуйте за Юнікодом: <code>1082 1086 1090</code></p>
+<p class="task"><strong>Завдання 2. Одні числа — дві таблиці.</strong></p>
+<p>Дано послідовність чисел: <code>234 238 242</code>. а) Декодуйте її за Windows-1251 — яке слово вийшло? б) Спробуйте декодувати ці самі числа за Юнікодом. Що станеться і чому? в) Одним реченням поясніть, як це пов'язано з «кракозябрами».</p>
+<p class="task"><strong>Завдання 3. Порахуй символи.</strong></p>
+<p>Візьміть речення: <code>Кіт спить.</code> а) Скільки в ньому символів? Не забудьте про пробіл і крапку. б) Скільки чисел буде записано у файлі з цим реченням? в) Скільки чисел було б, якби речення записали англійською: <code>Cat sleeps.</code></p>
+<p class="task"><strong>Завдання 4. Три покоління.</strong></p>
+<p>Заповніть таблицю по пам'яті, а потім перевірте себе за конспектом:</p>
+<table><thead><tr><th>Таблиця</th><th>Скільки символів</th><th>Чи є українські літери</th></tr></thead><tbody><tr><td>ASCII</td><td></td><td></td></tr><tr><td>Windows-1251</td><td></td><td></td></tr><tr><td>Юнікод</td><td></td><td></td></tr></tbody></table>
+</div>
+</body></html>

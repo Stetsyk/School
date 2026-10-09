@@ -1,0 +1,210 @@
+{
+  "main": {
+    "id": "b3215ec6c5790924",
+    "type": "split",
+    "children": [
+      {
+        "id": "4089bc544412e025",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e1efbc97ae7973cd",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Уроки/Пайтон/Урок 18. Цикл з лічильником: for і range.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Урок 18. Цикл з лічильником: for і range"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "093e4cb9a4f9c320",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "c5d838f38d8ae10b",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {
+            "sortOrder": "alphabetical",
+            "autoReveal": false
+          },
+          "icon": "lucide-folder-closed",
+          "title": "Files"
+        }
+      },
+      {
+        "id": "dd4a1da6c4d2121c",
+        "type": "leaf",
+        "state": {
+          "type": "search",
+          "state": {
+            "query": "",
+            "matchingCase": false,
+            "explainSearch": false,
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical"
+          },
+          "icon": "lucide-search",
+          "title": "Search"
+        }
+      },
+      {
+        "id": "838092da4c801ab2",
+        "type": "leaf",
+        "state": {
+          "type": "tag",
+          "state": {
+            "sortOrder": "frequency",
+            "useHierarchy": true,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-tags",
+          "title": "Tags"
+        }
+      },
+      {
+        "id": "4dc48fccf3000e50",
+        "type": "leaf",
+        "state": {
+          "type": "all-properties",
+          "state": {
+            "sortOrder": "frequency",
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-archive",
+          "title": "All properties"
+        }
+      },
+      {
+        "id": "51d6654fc05a3ce0",
+        "type": "leaf",
+        "state": {
+          "type": "bookmarks",
+          "state": {},
+          "icon": "lucide-bookmark",
+          "title": "Bookmarks"
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "right": {
+    "id": "e43eb27ace5c2b1c",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "edaa4cc354a914d2",
+        "type": "leaf",
+        "state": {
+          "type": "backlink",
+          "state": {
+            "file": "Уроки/Пайтон/Урок 27. Пошук і відбір за умовою.md",
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical",
+            "showSearch": false,
+            "searchQuery": "",
+            "backlinkCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-coming-in",
+          "title": "Backlinks"
+        }
+      },
+      {
+        "id": "0eab180a3b1ba870",
+        "type": "leaf",
+        "state": {
+          "type": "outgoing-link",
+          "state": {
+            "file": "Уроки/6 клас/Урок 01. БЖД. Цифрові пристрої та їх класифікація.md",
+            "linksCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-going-out",
+          "title": "Outgoing links"
+        }
+      },
+      {
+        "id": "ff7a70999daf4971",
+        "type": "leaf",
+        "state": {
+          "type": "outline",
+          "state": {
+            "file": "Уроки/6 клас/Урок 01. БЖД. Цифрові пристрої та їх класифікація.md",
+            "followCursor": false,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-list",
+          "title": "Outline"
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "terminal:Open terminal": false,
+      "pdf-plus:PDF++: Toggle auto-copy": false,
+      "pdf-plus:PDF++: Toggle auto-focus": false,
+      "pdf-plus:PDF++: Toggle auto-paste": false,
+      "obsidian-excalidraw-plugin:New drawing": false
+    }
+  },
+  "active": "e1efbc97ae7973cd",
+  "lastOpenFiles": [
+    "Календарне планування/5 клас.md",
+    "Уроки/Пайтон/Урок 06. Практикум. Багатокрокові задачі.md",
+    "Уроки/Пайтон/Урок 09. Команда input і головна пастка.md",
+    "Уроки/Пайтон/Урок 07. Типи даних int, float, str. Перетворення типів.md",
+    "Дзвінки.png",
+    "Уроки/Пайтон/Урок 15. Логічні операції and, or, not.md",
+    "Уроки/Пайтон/Урок 14. Дві гілки: if — else.md",
+    "Уроки/Пайтон/Урок 30. split і join. Проєкт «Щоденник оцінок».md",
+    "Уроки/Пайтон/Урок 27. Пошук і відбір за умовою.md",
+    "Уроки/Пайтон/Урок 26. Перебір списку циклом.md",
+    "Уроки/Пайтон/Урок 24. Список: створення та індекси.md",
+    "Уроки/Пайтон/Урок 20. Цикл разом з умовою.md",
+    "Уроки/Пайтон/Урок 19. range з початком і кроком. Накопичувач.md",
+    "Уроки/Пайтон/Урок 18. Цикл з лічильником: for і range.md",
+    "Презентація 6 клас.md",
+    "Уроки/6 клас/Урок І-01. БЖД. Цифрові пристрої та їх класифікація.md",
+    "Розклад.png",
+    "Уроки/Пайтон/Урок 05. Змінна змінює значення. Лічильник і накопичувач.md",
+    "Уроки/Пайтон/Урок 04. Змінна і команда присвоювання.md",
+    "Уроки/Пайтон/Урок 08. Логічний тип bool. Порівняння.md",
+    "TODO.md",
+    "Уроки/6 клас/Урок І-02. БЖД. Цифрові технології. Переваги і недоліки. Цифровий слід.md",
+    "Уроки/9 клас/Урок І-01-02. Інформаційні системи. Програмне забезпечення. Ліцензії. Операційні системи.md",
+    "Уроки/8 клас/Урок І-04. Двійкове кодування. Одиниці вимірювання довжини двійкового коду.md",
+    "Уроки/Пайтон/Урок 25. Зміна списку.md",
+    "Уроки/6 клас/Урок І-5.01. БЖД. Поняття моделі. Види моделей. Інформаційні та математичні моделі.md",
+    "Уроки/5 клас/Урок І-3.06. Проєкт «Текстовий документ».md",
+    "Уроки/8 клас/Урок І-3.01-02. Персональний комп'ютер. Процесор. Пристрої пам'яті.md",
+    "Роздруківки/Зошит 5кл-2-3_6кл-2-3_7кл-11-12_8кл-2-3_9кл-2-4.pdf",
+    "Rozklad.png",
+    "Dszvinky.png"
+  ]
+}

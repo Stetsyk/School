@@ -1,0 +1,53 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><title>probe</title><style>
+@page { size: A4; margin: 12mm 12mm 12mm 12mm;
+        @bottom-center {
+          content: counter(page) " / " counter(pages);
+          font-family: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+          font-size: 8.5pt; color: #555; } }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+       color: #000; }
+.page { page-break-after: always; }
+.page:last-child { page-break-after: auto; }
+.hdr { border-bottom: 1.6pt solid #000; padding-bottom: 2mm; margin-bottom: 3mm; }
+.hdr .cls { font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.hdr .ttl { font-weight: 700; margin-top: .6mm; }
+.hdr .sub { margin-top: .8mm; }
+.name { float: right; font-weight: 400; }
+h2, h3, h4 { margin: 2.6mm 0 1.2mm; page-break-after: avoid; }
+h2 { font-size: 1.12em; } h3 { font-size: 1.06em; } h4 { font-size: 1em; }
+p { margin: 0 0 1.4mm; }
+p.task { margin-top: 3.4mm; page-break-after: avoid; }
+.page > p.task:first-of-type { margin-top: 0; }
+ul, ol { margin: 0 0 1.6mm; padding-left: 5.5mm; }
+li { margin-bottom: .5mm; }
+table { border-collapse: collapse; width: 100%; margin: 1.4mm 0 2.2mm;
+        page-break-inside: avoid; }
+th, td { border: .6pt solid #444; padding: 1mm 1.4mm; text-align: left;
+         vertical-align: top; }
+th { background: #eee; font-weight: 700; }
+pre { border: .6pt solid #888; background: #f6f6f6; padding: 1.2mm 1.8mm;
+      margin: 1.2mm 0 1.8mm; white-space: pre-wrap;
+      font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .92em;
+      page-break-inside: avoid; }
+code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .94em; }
+blockquote { margin: 1.2mm 0 1.8mm; padding-left: 2.4mm;
+             border-left: 1.4pt solid #999; }
+strong { font-weight: 700; }
+</style></head><body>
+<div class="page" style="font-size:13.0pt; line-height:1.22">
+  <div class="hdr"><div class="cls">8 клас · Урок І-03</div><div class="ttl">Кодування графічних і мультимедійних даних. Колірні моделі</div><div class="sub">Практичні завдання в зошиті</div></div>
+<p class="task"><strong>Завдання 1. Визнач колір за кодом RGB.</strong></p>
+<p>Запишіть, який колір задає кожен код:</p>
+<ol><li>(255, 0, 0)</li><li>(0, 0, 0)</li><li>(255, 255, 255)</li><li>(0, 255, 0)</li><li>(255, 255, 0)</li><li>(0, 0, 255)</li><li>(128, 128, 128)</li><li>(0, 255, 255)</li></ol>
+<p class="task"><strong>Завдання 2. RGB ↔ HEX.</strong></p>
+<p>Скористайтеся підказкою: <code>00</code> = 0, <code>80</code> = 128, <code>FF</code> = 255. а) Запишіть у HEX кольори: білий, чорний, червоний, синій, жовтий. б) Прочитайте, які це кольори: <code>#00FF00</code>, <code>#808080</code>, <code>#00FFFF</code>. в) Поясніть одним реченням, чому в HEX-коді рівно шість символів після <code>#</code>.</p>
+<p class="task"><strong>Завдання 3. Растр чи вектор.</strong></p>
+<p>Розподіліть у два стовпці — <em>Растрове</em> / <em>Векторне</em>: фотографія з телефона · логотип школи · скриншот екрана · дорожній знак у навігаторі · відскановане фото з альбому · шрифт у текстовому редакторі · схема метро · кадр із фільму.</p>
+<p class="task"><strong>Завдання 4. Екран чи папір.</strong></p>
+<p>Для кожної ситуації напишіть, яку модель використають — RGB чи CMYK:</p>
+<ol><li>фото на екрані телефона</li><li>афіша, яку друкують у типографії</li><li>кадр відеогри</li><li>шкільна газета, надрукована на принтері</li><li>сайт школи</li><li>футболка з малюнком</li></ol>
+<p class="task"><strong>Завдання 5. Задача.</strong></p>
+<p>Растрове зображення має розмір 100 × 50 пікселів. Колір кожного пікселя закодовано трьома числами (RGB), кожне число займає 1 байт. а) Скільки всього пікселів у зображенні? б) Скільки байтів потрібно, щоб закодувати всі його пікселі?</p>
+</div>
+</body></html>

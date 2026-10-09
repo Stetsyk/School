@@ -1,0 +1,53 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><title>probe</title><style>
+@page { size: A4; margin: 12mm 12mm 12mm 12mm;
+        @bottom-center {
+          content: counter(page) " / " counter(pages);
+          font-family: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+          font-size: 8.5pt; color: #555; } }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "PT Sans", "Helvetica Neue", Arial, sans-serif;
+       color: #000; }
+.page { page-break-after: always; }
+.page:last-child { page-break-after: auto; }
+.hdr { border-bottom: 1.6pt solid #000; padding-bottom: 2mm; margin-bottom: 3mm; }
+.hdr .cls { font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.hdr .ttl { font-weight: 700; margin-top: .6mm; }
+.hdr .sub { margin-top: .8mm; }
+.name { float: right; font-weight: 400; }
+h2, h3, h4 { margin: 2.6mm 0 1.2mm; page-break-after: avoid; }
+h2 { font-size: 1.12em; } h3 { font-size: 1.06em; } h4 { font-size: 1em; }
+p { margin: 0 0 1.4mm; }
+p.task { margin-top: 3.4mm; page-break-after: avoid; }
+.page > p.task:first-of-type { margin-top: 0; }
+ul, ol { margin: 0 0 1.6mm; padding-left: 5.5mm; }
+li { margin-bottom: .5mm; }
+table { border-collapse: collapse; width: 100%; margin: 1.4mm 0 2.2mm;
+        page-break-inside: avoid; }
+th, td { border: .6pt solid #444; padding: 1mm 1.4mm; text-align: left;
+         vertical-align: top; }
+th { background: #eee; font-weight: 700; }
+pre { border: .6pt solid #888; background: #f6f6f6; padding: 1.2mm 1.8mm;
+      margin: 1.2mm 0 1.8mm; white-space: pre-wrap;
+      font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .92em;
+      page-break-inside: avoid; }
+code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .94em; }
+blockquote { margin: 1.2mm 0 1.8mm; padding-left: 2.4mm;
+             border-left: 1.4pt solid #999; }
+strong { font-weight: 700; }
+</style></head><body>
+<div class="page" style="font-size:13.0pt; line-height:1.22">
+  <div class="hdr"><div class="cls">9 клас · Урок І-02-03</div><div class="ttl">Операційні системи. Сумісність ПЗ. Драйвери. Інсталяція та деінсталяція</div><div class="sub">Практичні завдання в зошиті</div></div>
+<p class="task"><strong>Завдання 1. Складові ОС.</strong></p>
+<p>Перепишіть у зошит назви складових і поставте біля кожної номер її опису. Складові: BIOS · ядро · файлова система · драйвери · інтерфейс користувача. Описи:</p>
+<ol><li>Визначає, як дані зберігаються на дисках.</li><li>Узгоджує роботу системи з конкретною моделлю пристрою.</li><li>Виконує команди й розподіляє пам'ять між програмами.</li><li>Забезпечує спілкування користувача із системою.</li><li>Зберігається в мікросхемі й запускається першим.</li></ol>
+<p class="task"><strong>Завдання 2. Чи запрацює?</strong></p>
+<p>Для кожної ситуації запишіть «так» або «ні» й одним реченням поясніть чому.</p>
+<ol><li>Програму для Windows встановлюють на комп'ютер з Linux.</li><li>Гру для Android встановлюють на смартфон з новішою версією Android.</li><li>64-розрядну ОС встановлюють на комп'ютер із 32-розрядним процесором.</li><li>32-розрядну ОС встановлюють на комп'ютер із 64-розрядним процесором.</li><li>Програму, зроблену для Windows 11, запускають на Windows XP.</li><li>Браузер Chrome використовують і на Windows, і на Linux, і на Android.</li></ol>
+<p class="task"><strong>Завдання 3. Правильне видалення.</strong></p>
+<ol><li>Запишіть у зошит кроки деінсталяції програми в правильному порядку:</li></ol>
+<p>обрати команду «Видалити» · знайти програму в списку · дочекатися завершення · відкрити список установлених програм у налаштуваннях системи.</p>
+<ol><li>Одним-двома реченнями поясніть, що залишиться в системі, якщо замість цього просто видалити папку з програмою, і чим це погано.</li></ol>
+<p class="task"><strong>Завдання 4. Кому потрібен драйвер.</strong></p>
+<p>Випишіть зі списку тільки ті пристрої, для яких потрібен драйвер, і біля кожного напишіть, що саме драйвер для нього перекладає: принтер · оперативна пам'ять · сканер · вебкамера · відеокарта · флешка · мишка · монітор.</p>
+</div>
+</body></html>

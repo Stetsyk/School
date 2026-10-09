@@ -1,0 +1,234 @@
+{
+  "main": {
+    "id": "cbc9f8ee87cf1441",
+    "type": "split",
+    "children": [
+      {
+        "id": "22c35f9d453151cd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "450bf825d9e2b433",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Tools/git/Git.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Git"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "113f64ce829b890c",
+    "type": "split",
+    "children": [
+      {
+        "id": "0ec2a27fccefa763",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9694216e70ac03e9",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "e0c058d6fb8ceef7",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "711e841dac1ade4f",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 291.12989044189453
+  },
+  "right": {
+    "id": "23efea288c5bdfb3",
+    "type": "split",
+    "children": [
+      {
+        "id": "8262d15cfb429197",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f8723c8fcd4673ee",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Уроки/8 клас/Урок ІІ-21. Умовне форматування.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Урок ІІ-21. Умовне форматування"
+            }
+          },
+          {
+            "id": "1fa8935252a5f776",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "b5ca12c0bc4eb7b2",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "c9a8ba24ca77a741",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "952f99d2ff127a14",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "terminal:Open terminal": false,
+      "pdf-plus:PDF++: Toggle auto-copy": false,
+      "pdf-plus:PDF++: Toggle auto-focus": false,
+      "pdf-plus:PDF++: Toggle auto-paste": false,
+      "obsidian-excalidraw-plugin:New drawing": false
+    }
+  },
+  "active": "450bf825d9e2b433",
+  "lastOpenFiles": [
+    "Tools/git/Git.md",
+    "Tools/git",
+    "Дзвінки.png",
+    "Розклад.png",
+    "Уроки/Пайтон/Урок 14. Дві гілки: if — else.md",
+    "Уроки/5 клас/Урок І-11. Текстовий документ. Введення, редагування та форматування тексту.md",
+    "Книги/pdf/5-клас.pdf",
+    "Уроки/6 клас/Урок І-01. БЖД. Цифрові пристрої та їх класифікація.md",
+    "Уроки/6 клас/Урок І-02. БЖД. Цифрові технології. Переваги і недоліки. Цифровий слід.md",
+    "Уроки/6 клас/Урок І-03. БЖД. Етапи створення комп'ютерної презентації.md",
+    "Уроки/5 клас/Урок І-07. Сайти. Розміщення інформації на сайтах. Навігація.md",
+    "Уроки що зараз/Зараз по кожному класу.md",
+    "Уроки що зараз/Презентація 6 -А клас.md",
+    "для уроків.md",
+    "Уроки/5 клас/Урок І-08. Електронна пошта. Впорядкування скриньки.md",
+    "Уроки/5 клас/Урок І-06. Інтернет. Пошукові системи. Критичне оцінювання інформації.md",
+    "Уроки/6 клас/Урок І-07. БЖД. Формати текстових документів. Списки.md",
+    "Уроки/6 клас/Урок І-06. БЖД. Підсумковий урок з теми «Комп'ютерні презентації».md",
+    "Уроки/6 клас/Урок І-05. БЖД. Анімація слайдів. Налаштування показу презентації.md",
+    "Уроки/6 клас/Урок І-04. БЖД. Анімація об'єктів на слайді.md",
+    "Уроки/Пайтон/Урок 06. Практикум. Багатокрокові задачі.md",
+    "Уроки/Пайтон/Урок 05. Змінна змінює значення. Лічильник і накопичувач.md",
+    "Уроки/Пайтон/Урок 04. Змінна і команда присвоювання.md",
+    "Уроки/Пайтон/Урок 18. Цикл з лічильником: for і range.md",
+    "Уроки/Пайтон/Урок 15. Логічні операції and, or, not.md",
+    "Уроки/Пайтон/Урок 16. elif і вкладені розгалуження.md",
+    "Уроки/Пайтон/Урок 40. Рух. Метод move і анімація.md",
+    "Книги/pdf/8-клас.pdf",
+    "Уроки що зараз",
+    "Untitled.md",
+    "Книги/pdf/7-клас.pdf",
+    "Уроки/Пайтон/Урок 11. Можливості print і f-рядки.md",
+    "Reinstall claude.md",
+    "Книги/pdf/9-клас.pdf",
+    "Роздруківки/Зошит 8кл-1-5_6кл-1-2_6кл-7-10.pdf",
+    "Роздруківки/_тест_нумерації.pdf",
+    "Роздруківки/Зошит 8кл-10-15.pdf",
+    "Роздруківки/Зошит python-1-44.pdf",
+    "Dszvinky.png",
+    "Rozklad.png"
+  ]
+}
