@@ -248,6 +248,7 @@ class Slide:
         else:
             self.box(x, y, w, h, "screen")
             ix, iy, iw, ih = x + 40, y + 20, w - 80, h - 40
+        size = fit(code, iw, size)
         self.add(
             f'<div style="position:absolute;left:{ix}px;top:{iy}px;width:{iw}px;height:{ih}px;display:flex;'
             f'flex-direction:column;justify-content:center;"><p style="font-family:{MONO};font-size:{size}px;'
@@ -256,6 +257,7 @@ class Slide:
     def screen(self, x, y, w, h, out, label="ЕКРАН", size=30, valign="center"):
         """Темне «вікно виводу» з підписом ЕКРАН / ЗРАЗОК."""
         self.box(x, y, w, h, "screen")
+        size = fit(out, w - 64, size)
         self.add(
             f'<div style="position:absolute;left:{x + 32}px;top:{y + 28}px;width:{w - 64}px;height:{h - 56}px;'
             f'display:flex;flex-direction:column;justify-content:{valign};gap:10px;">'
@@ -265,6 +267,7 @@ class Slide:
     def mistake(self, x, y, w, code, fix, code_h=140, size=28):
         """Блок «типова помилка»: темний код угорі, пояснення під ним."""
         h = code_h + 110
+        size = fit(code, w - 100, size)
         self.add(
             f'<div style="position:absolute;left:{x}px;top:{y}px;width:{w}px;height:{h}px;'
             f'background:rgba(238,241,245,0.4);border-radius:28px;box-sizing:border-box;border:2px solid {DARK_BG}"></div>'
@@ -495,6 +498,12 @@ class Deck:
         return path
 
 
+def fit(code, width, size):
+    """Зменшує шрифт моноширинного блоку, якщо найдовший рядок не влазить у ширину."""
+    longest = max((len(l) for l in code.split("\n")), default=1)
+    return min(size, int(width / (0.61 * max(1, longest))))
+
+
 def run(code):
     """Виконує приклад і повертає те, що він надрукував, — щоб «ЕКРАН» на слайді завжди був правдивий."""
     import contextlib
@@ -503,3 +512,112 @@ def run(code):
     with contextlib.redirect_stdout(buf):
         exec(code, {})
     return buf.getvalue().rstrip("\n")
+
+
+# ---------- справжні скриншоти tkinter / turtle ----------
+import tempfile
+SHOT_CACHE = os.environ.get("SLIDES_CACHE", os.path.join(tempfile.gettempdir(), "slides-cache"))
+
+
+def shot(code, scenario=None, frames=None):
+    """Запускає код на справжньому tkinter під Xvfb і повертає шлях до PNG.
+    scenario — дії після старту (див. tkshot.py). Кешується за вмістом."""
+    import hashlib
+    import subprocess
+    os.makedirs(SHOT_CACHE, exist_ok=True)
+    sc = json.dumps(scenario or [], ensure_ascii=False)
+    key = hashlib.md5((code + "\0" + sc + open(os.path.join(HERE, "tkshot.py")).read()).encode()).hexdigest()[:16]
+    png = os.path.join(SHOT_CACHE, key + ".png")
+    if not os.path.exists(png):
+        src = os.path.join(SHOT_CACHE, key + ".py")
+        scf = os.path.join(SHOT_CACHE, key + ".json")
+        open(src, "w", encoding="utf-8").write(code)
+        open(scf, "w", encoding="utf-8").write(sc)
+        r = subprocess.run(["xvfb-run", "-a", "-s", "-screen 0 1280x1024x24", "/usr/bin/python3.12",
+                            os.path.join(HERE, "tkshot.py"), src, png, scf],
+                           capture_output=True, text=True, timeout=120)
+        if r.returncode != 0 or not os.path.exists(png):
+            raise RuntimeError("Приклад не запустився:\n" + code + "\n" + r.stderr[-2000:])
+        open(png + ".out", "w").write(r.stdout)
+    return png
+
+
+def shot_info(png):
+    """(ширина, висота, заголовок вікна, надруковане в консоль, повідомлення messagebox)"""
+    from PIL import Image
+    w, h = Image.open(png).size
+    rd = lambda ext: open(png + ext, encoding="utf-8").read() if os.path.exists(png + ext) else ""
+    return w, h, rd(".title"), rd(".out").rstrip("\n"), rd(".msg")
+
+
+def data_uri(png):
+    import base64
+    return "data:image/png;base64," + base64.b64encode(open(png, "rb").read()).decode()
+
+
+def onion(pngs, out_name):
+    """Накладає кадри анімації один на одного: ранні — блідіші. Повертає шлях до PNG."""
+    from PIL import Image, ImageChops
+    ims = [Image.open(p).convert("RGB") for p in pngs]
+    base = ims[-1].copy()
+    white = Image.new("RGB", base.size, "white")
+    acc = white.copy()
+    n = len(ims)
+    for k, im in enumerate(ims):
+        alpha = 0.25 + 0.75 * (k / max(1, n - 1)) ** 2
+        faded = Image.blend(white, im, alpha)
+        acc = ImageChops.darker(acc, faded)
+    path = os.path.join(SHOT_CACHE, out_name + ".png")
+    acc.save(path)
+    return path
+
+
+def _window(self, x, y, w, png, title=None, dark=False):
+    """Скриншот у рамці вікна з заголовком. Повертає (x0, y0, масштаб) — куди лягла точка (0,0) зображення."""
+    iw, ih, t, _, _ = shot_info(png)
+    title = t if title is None else title
+    scale = w / iw
+    h = int(ih * scale)
+    bar = 46
+    self.add(
+        f'<div style="position:absolute;left:{x}px;top:{y}px;width:{w + 4}px;height:{h + bar + 4}px;'
+        f'background:#E6EAF0;border:2px solid {DARK_BG};border-radius:14px;box-sizing:border-box;overflow:hidden;'
+        f'box-shadow:0 14px 40px rgba(30,40,60,0.22)">'
+        f'<div style="position:absolute;left:0px;top:0px;width:100%;height:{bar}px;display:flex;flex-direction:row;'
+        f'align-items:center;gap:10px;padding:0px 18px;box-sizing:border-box;border-bottom:2px solid {DARK_BG}">'
+        f'<div style="width:14px;height:14px;border-radius:50%;background:#E8857A"></div>'
+        f'<div style="width:14px;height:14px;border-radius:50%;background:#EFC56E"></div>'
+        f'<div style="width:14px;height:14px;border-radius:50%;background:#8FC78A"></div>'
+        f'<p style="margin-left:12px;font-size:22px;font-weight:600;color:{INK};white-space:nowrap;overflow:hidden">{esc(title)}</p></div>'
+        f'<img alt="" src="{data_uri(png)}" style="position:absolute;left:0px;top:{bar}px;width:{w}px;height:{h}px;display:block"></div>')
+    return x + 2, y + 2 + bar, scale
+
+
+def _film(self, x, y, w, pngs, labels=None, gap=20):
+    """Кадри анімації в ряд, як плівка."""
+    n = len(pngs)
+    fw = (w - gap * (n - 1)) / n
+    for k, p in enumerate(pngs):
+        iw, ih, *_ = shot_info(p)
+        fh = ih * fw / iw
+        fx = x + k * (fw + gap)
+        self.add(f'<img alt="" src="{data_uri(p)}" style="position:absolute;left:{fx}px;top:{y}px;width:{fw}px;'
+                 f'height:{fh}px;border:2px solid {DARK_BG};border-radius:8px;box-sizing:border-box">')
+        if labels:
+            self.text(int(fx), int(y + fh + 10), int(fw), 40, labels[k], size=24, weight=600, align="center",
+                      color=self.ink2)
+    return y + fh
+
+
+def _marker(self, x, y, label, color=ORANGE, side="right"):
+    """Точка з підписом координат поверх скриншота."""
+    self.add(f'<div style="position:absolute;left:{x - 9}px;top:{y - 9}px;width:18px;height:18px;border-radius:50%;'
+             f'background:{color};border:3px solid #fff;box-sizing:border-box;box-shadow:0 0 0 2px {color}"></div>')
+    lx = x + 16 if side == "right" else x - 236
+    al = "left" if side == "right" else "right"
+    self.text(int(lx), int(y - 20), 220, 40, label, size=24, weight=700, mono=True, color=color, align=al)
+
+
+Slide.window = _window
+Slide.film = _film
+Slide.marker = _marker
