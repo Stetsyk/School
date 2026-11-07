@@ -526,16 +526,20 @@ def shot(code, scenario=None, frames=None):
     import subprocess
     os.makedirs(SHOT_CACHE, exist_ok=True)
     sc = json.dumps(scenario or [], ensure_ascii=False)
-    key = hashlib.md5((code + "\0" + sc + open(os.path.join(HERE, "tkshot.py")).read()).encode()).hexdigest()[:16]
+    envkey = os.environ.get("TURTLE_SIZE", "") + os.environ.get("TURTLE_PEN", "")
+    key = hashlib.md5((code + "\0" + sc + envkey + open(os.path.join(HERE, "tkshot.py")).read()).encode()).hexdigest()[:16]
     png = os.path.join(SHOT_CACHE, key + ".png")
     if not os.path.exists(png):
         src = os.path.join(SHOT_CACHE, key + ".py")
         scf = os.path.join(SHOT_CACHE, key + ".json")
         open(src, "w", encoding="utf-8").write(code)
         open(scf, "w", encoding="utf-8").write(sc)
+        env = dict(os.environ)
+        if "turtle" in code and "turtle.setup(" not in code:
+            env.setdefault("TURTLE_SIZE", "[640, 480]")
         r = subprocess.run(["xvfb-run", "-a", "-s", "-screen 0 1280x1024x24", "/usr/bin/python3.12",
                             os.path.join(HERE, "tkshot.py"), src, png, scf],
-                           capture_output=True, text=True, timeout=120)
+                           capture_output=True, text=True, timeout=120, env=env)
         if r.returncode != 0 or not os.path.exists(png):
             raise RuntimeError("Приклад не запустився:\n" + code + "\n" + r.stderr[-2000:])
         open(png + ".out", "w").write(r.stdout)

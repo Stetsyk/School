@@ -5,6 +5,7 @@
 {"type": [номер_поля, "текст"]}, {"button": номер}, {"steps": N} — скільки кадрів анімації прокрутити.
 """
 import json
+import os
 import subprocess
 import sys
 import time
@@ -125,8 +126,10 @@ code = open(src, encoding="utf-8").read()
 if "turtle" in code:
     import turtle
     _setup = turtle.setup
-    turtle.setup(640, 480)
+    turtle.setup(*(json.loads(os.environ.get('TURTLE_SIZE', '[640, 480]'))))
     turtle.tracer(0, 0)
+    if os.environ.get('TURTLE_PEN'):
+        turtle.pensize(int(os.environ['TURTLE_PEN']))
     turtle.done = turtle.mainloop = lambda: (turtle.update(), play())
     turtle.speed = lambda *a, **k: None
 try:
