@@ -470,6 +470,32 @@ class Deck:
         s.pill(where)
         return s
 
+    def now(self, label, notes="", minutes=2, title_size=58):
+        """Коротка практика просто посеред пояснення: зробили — і йдемо далі."""
+        s = self.slide(label, notes, blobs=1)
+        s.h2(label, size=title_size, top=104)
+        s.pill(f"Зроби зараз · {minutes} хв")
+        return s
+
+    def levels(self, items, notes="", title="Оберіть свій рівень", top=240, h=560,
+               bottom="Рівень 1 під силу кожному. Упоралися — переходьте на наступний."):
+        """Три колонки-рівні: items = [(назва, підзаголовок, текст або список рядків)].
+        Перший рівень під силу кожному, третій — для тих, хто вже впорався."""
+        s = self.slide(title, notes, blobs=3)
+        s.h2(title)
+        kinds = ["light", "blue", "orange"]
+        cols = [INK2, BLUE, ORANGE]
+        for k, (name, sub, body) in enumerate(items):
+            x = 128 + k * 568
+            s.box(x, top, 528, h, kinds[k])
+            s.text(x + 36, top + 30, 456, 40, f"Рівень {k + 1}", size=26, weight=700, color=cols[k])
+            s.text(x + 36, top + 72, 456, 70, f"<b>{name}</b>", size=46, lh=1.1)
+            s.text(x + 36, top + 140, 456, 80, sub, size=27, color=INK2, lh=1.3)
+            s.text(x + 36, top + 230, 456, h - 260, body, size=30, lh=1.35)
+        if bottom:
+            s.note(top + h + 50, bottom, size=32)
+        return s
+
     def save(self, path):
         src = open(ENGINE_SOURCE, encoding="utf-8").read()
         a = src.find("<main")
