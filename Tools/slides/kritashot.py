@@ -20,7 +20,7 @@ Krita запускається під віртуальним дисплеєм (X
     {"open": path}                     — відкрити файл (PNG, SVG, KRA…)
     {"new": [w, h, "назва"]}           — новий білий документ
     {"tool": "KisToolBrush"}           — увімкнути інструмент (id дії Krita)
-    {"action": "zoom_to_100pct"}       — будь-яка дія Krita за її id
+    {"action": "zoom_to_100pct"}       — будь-яка дія Krita за її id; "async": true — якщо вона відкриває діалог
     {"svg": "<svg …>"}                 — додати векторний шар із фігурами
     {"select_shapes": true}            — виділити всі фігури на векторному шарі
     {"select_rect": [x, y, w, h]}      — прямокутне виділення
@@ -122,12 +122,18 @@ class Shot(Extension):
             w.addView(self.doc)
             return 1200
         if "tool" in st:
-            k.action(st["tool"] if "/" in st["tool"] else "KritaShape/" + st["tool"]).trigger()
+            a = k.action(st["tool"]) or k.action("KritaShape/" + st["tool"]) or k.action("KritaSelected/" + st["tool"])
+            if a is None:
+                log("no tool", st["tool"], [x.objectName() for x in k.actions() if "Tool" in x.objectName()])
+            else:
+                a.trigger()
             return 600
         if "action" in st:
             a = k.action(st["action"])
             if a is None:
                 log("no action", st["action"])
+            elif st.get("async"):
+                QTimer.singleShot(0, a.trigger)   # діалог блокує виклик — запускаємо окремо
             else:
                 a.trigger()
             return st.get("delay", 700)
