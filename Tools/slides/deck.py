@@ -52,6 +52,40 @@ DARK_BLOBS = [
     [(1000, 0, 920, 620, "60% 30%")],
 ]
 
+NOTES_JS = """<script>
+/* Нотатки вчителя: клавіша N (або Т в українській розкладці) відкриває окреме вікно з нотатками
+   поточного слайда. Вікно стежить за показом саме. Перетягніть його на екран ноутбука, а не проєктора. */
+(function(){
+  document.addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey || e.code !== 'KeyN') return;
+    var w = window.open('', 'deck-notes', 'width=820,height=680');
+    if (!w) return;
+    w.document.open();
+    w.document.write('<!doctype html><meta charset="utf-8"><title>Нотатки вчителя</title><style>' +
+      'body{font:23px/1.5 Inter,Arial,sans-serif;margin:28px;background:#2F3033;color:#EEF1F5}' +
+      '#c{font-size:18px;color:#BFC6D0;font-weight:600}#t{font-size:30px;font-weight:700;margin:4px 0 18px}' +
+      '#n{white-space:pre-wrap}#next{margin-top:28px;font-size:18px;color:#BFC6D0;border-top:1px solid #555;padding-top:12px}' +
+      '</style><div id="c"></div><div id="t"></div><div id="n"></div><div id="next"></div>');
+    w.document.close();
+    var last = -1, timer = setInterval(upd, 300);
+    function upd(){
+      if (w.closed) { clearInterval(timer); return; }
+      var m = /^#(\\d+)$/.exec(location.hash), i = m ? Number(m[1]) - 1 : 0;
+      if (i === last) return;
+      last = i;
+      var ss = document.querySelectorAll('.deck-slide'), s = ss[i], nx = ss[i + 1];
+      if (!s) return;
+      w.document.getElementById('c').textContent = 'Слайд ' + (i + 1) + ' з ' + ss.length;
+      w.document.getElementById('t').textContent = s.getAttribute('data-label') || '';
+      w.document.getElementById('n').textContent = s.getAttribute('data-speaker-notes') || '— нотаток немає —';
+      w.document.getElementById('next').textContent = nx ? 'Далі: ' + (nx.getAttribute('data-label') || '') : 'Це останній слайд';
+    }
+    upd();
+  });
+})();
+</script>
+"""
+
 
 def esc(s):
     return html.escape(s, quote=True)
@@ -496,6 +530,30 @@ class Deck:
             s.note(top + h + 50, bottom, size=32)
         return s
 
+    def rubric(self, rows, notes="", title="Як оцінюємо", total=None, scale=None, widths=(560, 560, 150),
+               row_h=74, size=26):
+        """Слайд з критеріями: rows = [(завдання, що перевіряю, бали)]. Праворуч — 12-бальна шкала.
+        Учні бачать, за що бал; учитель — що саме перевіряти й скільки ставити."""
+        s = self.slide(title, notes, blobs=2)
+        s.h2(title, size=64, top=104)
+        data = [["Що зробити", "Що перевіряю", "Бали"]] + [list(r) for r in rows]
+        if total:
+            data.append(["<b>Разом</b>", "", f"<b>{total}</b>"])
+        s.table(128, 210, list(widths), data, row_h=row_h, size=size, aligns=["left", "left", "center"],
+                fills={(len(data) - 1, None): "rgba(169,203,243,0.8)"} if total else None)
+        scale = scale or [("1–3", "впізнає, повторює за зразком"), ("4–6", "робить за зразком, з підказкою"),
+                          ("7–9", "робить сам, дрібні помилки"), ("10–12", "сам, без помилок, пояснює чому")]
+        x = 128 + sum(widths) + 44
+        w = 1792 - x
+        s.text(x, 210, w, 40, "<b>Шкала</b>", size=28)
+        kinds = ["light2", "light", "blue", "orange"]
+        for k, (pts, txt) in enumerate(scale):
+            y = 262 + k * 150
+            s.box(x, y, w, 132, kinds[k], radius=16)
+            s.text(x + 24, y, 150, 132, f"<b>{pts}</b>", size=40, valign="center", color=BLUE if k > 1 else INK)
+            s.text(x + 170, y, w - 190, 132, txt, size=25, valign="center", lh=1.25)
+        return s
+
     def save(self, path):
         src = open(ENGINE_SOURCE, encoding="utf-8").read()
         a = src.find("<main")
@@ -519,6 +577,7 @@ class Deck:
         body = ('<main data-appifact-content style="font:16px / 24px ui-sans-serif, system-ui, sans-serif;'
                 'color:rgb(11, 11, 11)">\n' + "\n".join(s.render(total) for s in self.slides) + "\n")
         os.makedirs(os.path.dirname(path), exist_ok=True)
+        tail = tail.replace("</body>", NOTES_JS + "</body>", 1)
         with open(path, "w", encoding="utf-8") as f:
             f.write(head + body + tail)
         return path
