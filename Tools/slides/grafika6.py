@@ -179,3 +179,39 @@ def ring(s, x, y, w, h, color="#F0943A", width=5, radius=10):
     """Рамка-підсвітка поверх скриншота."""
     s.raw(f'<div style="position:absolute;left:{x}px;top:{y}px;width:{w}px;height:{h}px;border:{width}px solid {color};'
           f'border-radius:{radius}px;box-sizing:border-box;box-shadow:0 0 0 3px rgba(255,255,255,0.6)"></div>')
+
+
+def ring_with_gap(gap=True, name=None, size=500):
+    """Контур кола для досліду із заливкою: з щілиною фарба «витікає»."""
+    im = Image.new("RGBA", (size, size), (255, 255, 255, 255))
+    d = ImageDraw.Draw(im)
+    d.ellipse((90, 90, 410, 410), outline=(47, 48, 51, 255), width=10)
+    if gap:
+        d.rectangle((395, 230, 420, 262), fill=(255, 255, 255, 255))
+    p = path(name or f"kontur_{'shchilyna' if gap else 'tsilyi'}.png")
+    im.save(p)
+    return p
+
+
+# Перетворення координат документа 500×500 у координати екрана Krita (1366×768, масштаб 100 %).
+ORIGIN = (328, 156)
+
+
+def scr(x, y):
+    return ORIGIN[0] + int(x), ORIGIN[1] + int(y)
+
+
+def stroke(points):
+    """Команди xdotool для мазка пензлем через точки документа."""
+    x0, y0 = scr(*points[0])
+    cmds = [f"mousemove {x0} {y0}", "mousedown 1"]
+    for (x, y) in points[1:]:
+        sx, sy = scr(x, y)
+        cmds.append(f"mousemove {sx} {sy}")
+    cmds += ["mouseup 1", "sleep 0.3"]
+    return cmds
+
+
+def smile_points(cx=250, cy=280, rx=110, ry=90, a0=20, a1=160, n=14):
+    return [(cx + rx * math.cos(math.radians(a0 + (a1 - a0) * i / (n - 1))),
+             cy + ry * math.sin(math.radians(a0 + (a1 - a0) * i / (n - 1)))) for i in range(n)]
