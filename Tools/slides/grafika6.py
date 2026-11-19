@@ -215,3 +215,17 @@ def stroke(points):
 def smile_points(cx=250, cy=280, rx=110, ry=90, a0=20, a1=160, n=14):
     return [(cx + rx * math.cos(math.radians(a0 + (a1 - a0) * i / (n - 1))),
              cy + ry * math.sin(math.radians(a0 + (a1 - a0) * i / (n - 1)))) for i in range(n)]
+
+
+LAND_PARTS = {
+    "sonce": '<circle id="sonce" cx="380" cy="110" r="55" fill="#F7CE46"/>',
+    "nebo": '<rect id="nebo" x="0" y="0" width="500" height="500" fill="#BFD8F5"/>',
+    "hory": '<polygon id="hory" points="0,330 140,170 260,300 360,190 500,320 500,500 0,500" fill="#8D949E"/>',
+    "khmara": '<ellipse id="khmara" cx="170" cy="120" rx="80" ry="34" fill="#FFFFFF"/>',
+    "trava": '<rect id="trava" x="0" y="360" width="500" height="140" fill="#7FB07A"/>',
+}
+
+
+def landscape_svg(order):
+    return ('<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">'
+            + "".join(LAND_PARTS[k] for k in order) + "</svg>")
