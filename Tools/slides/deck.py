@@ -739,20 +739,48 @@ def _grid_lines(self, x0, y0, k, cw, ch, cell=50, major=100, fine=GRID_FINE, str
              f'viewBox="0 0 {w:.1f} {h:.1f}">' + "".join(ls) + '</svg>')
 
 
+AXIS_X = BLUE          # вісь x і її числа — сині
+AXIS_Y = "#2E8B57"     # вісь y і її числа — зелені
+
+
+def _axis_badges(self, x0, y0, k, cw, ch, fs):
+    """Підписи осей усередині полотна: «x →» угорі праворуч, «y ↓» унизу ліворуч.
+    Повертає межі, за які не мають заходити числа: (ліва межа значка x, верхня межа значка y)."""
+    bs = fs + 9
+    st = (f'font-family:{MONO};font-size:{bs}px;font-weight:800;line-height:1;color:#fff;'
+          f'padding:3px 8px;border-radius:7px;white-space:nowrap;')
+    bw = int(bs * 2.6)
+    right, bottom = x0 + cw * k, y0 + ch * k
+    self.add(f'<p style="position:absolute;left:{right - bw - 4:.0f}px;top:{y0 + 3:.0f}px;{st}background:{AXIS_X}">x <span style="font-family:Inter,Arial,sans-serif">→</span></p>')
+    ylim = bottom
+    if ch * k > 120:
+        self.add(f'<p style="position:absolute;left:{x0 + 3:.0f}px;top:{bottom - bs - 12:.0f}px;{st}background:{AXIS_Y}">y <span style="font-family:Inter,Arial,sans-serif">↓</span></p>')
+        ylim = bottom - bs - 14
+    return right - bw - 8, ylim
+
+
 def _grid_over(self, o, cw=1000, ch=600, cell=50, major=100, labels=True):
-    """Сітка поверх скриншота полотна (o — те, що повернув window). Числа — всередині, біля країв."""
+    """Сітка поверх скриншота полотна (o — те, що повернув window). Числа — всередині, біля країв;
+    числа x — сині, числа y — зелені, плюс підписи осей «x →» і «y ↓»."""
     x0, y0, k = o
     _grid_lines(self, x0, y0, k, cw, ch, cell, major, GRID_FINE_ON_PIC, GRID_MAJOR_ON_PIC)
+    fs = max(14, min(20, int(k * 26)))
+    xlim, ylim = _axis_badges(self, x0, y0, k, cw, ch, fs)
     if not labels:
         return o
     step = _label_step(k, major)
-    fs = max(14, min(20, int(k * 26)))
-    lab = (f'font-family:{MONO};font-size:{fs}px;font-weight:700;line-height:1;color:#1E3C6E;'
-           f'background:rgba(255,255,255,0.82);padding:2px 4px;border-radius:5px;white-space:nowrap;')
+    lab = (f'font-family:{MONO};font-size:{fs}px;font-weight:700;line-height:1;'
+           f'background:rgba(255,255,255,0.85);padding:2px 4px;border-radius:5px;white-space:nowrap;')
     for v in range(step, cw, step):
-        self.add(f'<p style="position:absolute;left:{x0 + v * k + 3:.0f}px;top:{y0 + 3:.0f}px;{lab}">{v}</p>')
+        lx = x0 + v * k + 3
+        if lx + fs * 0.62 * len(str(v)) + 8 > xlim:
+            break
+        self.add(f'<p style="position:absolute;left:{lx:.0f}px;top:{y0 + 3:.0f}px;{lab}color:{AXIS_X}">{v}</p>')
     for v in range(step, ch, step):
-        self.add(f'<p style="position:absolute;left:{x0 + 3:.0f}px;top:{y0 + v * k + 3:.0f}px;{lab}">{v}</p>')
+        ly = y0 + v * k + 3
+        if ly + fs + 4 > ylim:
+            break
+        self.add(f'<p style="position:absolute;left:{x0 + 3:.0f}px;top:{ly:.0f}px;{lab}color:{AXIS_Y}">{v}</p>')
     self.add(f'<p style="position:absolute;left:{x0 + 3:.0f}px;top:{y0 + 3:.0f}px;{lab}color:{ORANGE}">0</p>')
     return o
 
@@ -779,22 +807,27 @@ def _plane(self, x, y, w, cw=1000, ch=600, cell=50, major=100, axes=True, bg="#F
         step = _label_step(k, major)
         fs = size or max(16, min(24, int(k * 30)))
         for v in range(0, cw + 1, step):
-            col = ORANGE if v == 0 else INK2
+            col = ORANGE if v == 0 else AXIS_X
             self.add(f'<p style="position:absolute;left:{x + v * k - 40:.0f}px;top:{y - fs - 12:.0f}px;width:80px;'
                      f'text-align:center;font-family:{MONO};font-size:{fs}px;font-weight:700;line-height:1;color:{col}">{v}</p>')
         for v in range(step, ch + 1, step):
             self.add(f'<p style="position:absolute;left:{x - 92:.0f}px;top:{y + v * k - fs * 0.6:.0f}px;width:80px;'
-                     f'text-align:right;font-family:{MONO};font-size:{fs}px;font-weight:700;line-height:1;color:{INK2}">{v}</p>')
+                     f'text-align:right;font-family:{MONO};font-size:{fs}px;font-weight:700;line-height:1;color:{AXIS_Y}">{v}</p>')
     if axes:
+        mid = f"pa{self.index}_{len(self.parts)}"
+        mk = lambda col, n: (f'<marker id="{mid}{n}" markerWidth="22" markerHeight="20" refX="18" refY="10" orient="auto" '
+                             f'markerUnits="userSpaceOnUse"><path d="M0,0 L22,10 L0,20 z" fill="{col}"/></marker>')
         self.add(f'<svg style="position:absolute;left:0px;top:0px;overflow:visible" width="1920" height="1080">'
-                 f'<defs><marker id="pa{self.index}_{len(self.parts)}" markerWidth="22" markerHeight="20" refX="18" refY="10" '
-                 f'orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L22,10 L0,20 z" fill="{BLUE}"/></marker></defs>'
-                 f'<path d="M{x + w + 44:.0f} {y + 2} L{x + w + 92:.0f} {y + 2}" stroke="{BLUE}" stroke-width="4" '
-                 f'marker-end="url(#pa{self.index}_{len(self.parts)})"/>'
-                 f'<path d="M{x + 2} {y + h + 10:.0f} L{x + 2} {y + h + 56:.0f}" stroke="{BLUE}" stroke-width="4" '
-                 f'marker-end="url(#pa{self.index}_{len(self.parts)})"/></svg>')
-        self.text(int(x + w + 58), int(y + 8), 60, 40, "x", size=34, weight=800, color=BLUE, mono=True)
-        self.text(int(x + 16), int(y + h + 22), 60, 40, "y", size=34, weight=800, color=BLUE, mono=True)
+                 f'<defs>{mk(AXIS_X, "x")}{mk(AXIS_Y, "y")}</defs>'
+                 f'<path d="M{x + w + 44:.0f} {y + 2} L{x + w + 92:.0f} {y + 2}" stroke="{AXIS_X}" stroke-width="4" '
+                 f'marker-end="url(#{mid}x)"/>'
+                 f'<path d="M{x + 2} {y + h + 10:.0f} L{x + 2} {y + h + 56:.0f}" stroke="{AXIS_Y}" stroke-width="4" '
+                 f'marker-end="url(#{mid}y)"/></svg>')
+        self.text(int(x + w + 54), int(y + 6), 70, 50, "x", size=46, weight=800, color=AXIS_X, mono=True, lh=1)
+        self.text(int(x + 16), int(y + h + 14), 70, 50, "y", size=46, weight=800, color=AXIS_Y, mono=True, lh=1)
+    else:
+        # без стрілок зовні — підписи осей усередині полотна, щоб x і y не плутали
+        _axis_badges(self, x, y, k, cw, ch, max(14, min(20, int(k * 26))))
     return x, y, k
 
 
