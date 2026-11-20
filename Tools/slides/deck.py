@@ -710,6 +710,158 @@ def _marker(self, x, y, label, color=ORANGE, side="right"):
     self.text(int(lx), int(y - 20), 220, 40, label, size=24, weight=700, mono=True, color=color, align=al)
 
 
-Slide.window = _window
+# ---------- координатна сітка ----------
+# Полотно в усіх графічних колодах — 1000 × 600: 20 × 12 клітинок по 50 точок.
+# Тонкі лінії — кожні 50 точок (клітинка), жирніші з числами — кожні 100 (дві клітинки).
+GRID_FINE = "rgba(47,111,183,0.20)"
+GRID_MAJOR = "rgba(47,111,183,0.50)"
+GRID_FINE_ON_PIC = "rgba(30,60,110,0.22)"
+GRID_MAJOR_ON_PIC = "rgba(30,60,110,0.45)"
+
+
+def _label_step(k, major):
+    step = major
+    while step * k < 46:
+        step += major
+    return step
+
+
+def _grid_lines(self, x0, y0, k, cw, ch, cell=50, major=100, fine=GRID_FINE, strong=GRID_MAJOR):
+    w, h = cw * k, ch * k
+    ls = []
+    for v in range(0, cw + 1, cell):
+        col, sw = (strong, 2) if v % major == 0 else (fine, 1.5)
+        ls.append(f'<line x1="{v * k:.1f}" y1="0" x2="{v * k:.1f}" y2="{h:.1f}" stroke="{col}" stroke-width="{sw}"/>')
+    for v in range(0, ch + 1, cell):
+        col, sw = (strong, 2) if v % major == 0 else (fine, 1.5)
+        ls.append(f'<line x1="0" y1="{v * k:.1f}" x2="{w:.1f}" y2="{v * k:.1f}" stroke="{col}" stroke-width="{sw}"/>')
+    self.add(f'<svg style="position:absolute;left:{x0}px;top:{y0}px;overflow:visible" width="{w:.0f}" height="{h:.0f}" '
+             f'viewBox="0 0 {w:.1f} {h:.1f}">' + "".join(ls) + '</svg>')
+
+
+def _grid_over(self, o, cw=1000, ch=600, cell=50, major=100, labels=True):
+    """Сітка поверх скриншота полотна (o — те, що повернув window). Числа — всередині, біля країв."""
+    x0, y0, k = o
+    _grid_lines(self, x0, y0, k, cw, ch, cell, major, GRID_FINE_ON_PIC, GRID_MAJOR_ON_PIC)
+    if not labels:
+        return o
+    step = _label_step(k, major)
+    fs = max(14, min(20, int(k * 26)))
+    lab = (f'font-family:{MONO};font-size:{fs}px;font-weight:700;line-height:1;color:#1E3C6E;'
+           f'background:rgba(255,255,255,0.82);padding:2px 4px;border-radius:5px;white-space:nowrap;')
+    for v in range(step, cw, step):
+        self.add(f'<p style="position:absolute;left:{x0 + v * k + 3:.0f}px;top:{y0 + 3:.0f}px;{lab}">{v}</p>')
+    for v in range(step, ch, step):
+        self.add(f'<p style="position:absolute;left:{x0 + 3:.0f}px;top:{y0 + v * k + 3:.0f}px;{lab}">{v}</p>')
+    self.add(f'<p style="position:absolute;left:{x0 + 3:.0f}px;top:{y0 + 3:.0f}px;{lab}color:{ORANGE}">0</p>')
+    return o
+
+
+def _window_grid(self, x, y, w, png, title=None, dark=False, grid=False, cw=None, ch=None):
+    o = _window(self, x, y, w, png, title, dark)
+    if grid:
+        iw, ih, *_ = shot_info(png)
+        _grid_over(self, o, cw or iw - 2, ch or ih - 2, labels=(grid != "lines"))
+    return o
+
+
+def _plane(self, x, y, w, cw=1000, ch=600, cell=50, major=100, axes=True, bg="#FFFFFF", numbers=True, size=None):
+    """Біле «полотно в клітинку» з числами зовні: x — над верхнім краєм, y — ліворуч.
+    Повертає (x0, y0, k): точка полотна (cx, cy) лежить на слайді в (x0 + cx·k, y0 + cy·k)."""
+    k = w / cw
+    h = ch * k
+    self.add(f'<div style="position:absolute;left:{x}px;top:{y}px;width:{w:.0f}px;height:{h:.0f}px;background:{bg};'
+             f'box-shadow:0 10px 30px rgba(30,40,60,0.16)"></div>')
+    _grid_lines(self, x, y, k, cw, ch, cell, major)
+    self.add(f'<div style="position:absolute;left:{x}px;top:{y}px;width:{w:.0f}px;height:{h:.0f}px;'
+             f'border:2px solid {DARK_BG};box-sizing:border-box"></div>')
+    if numbers:
+        step = _label_step(k, major)
+        fs = size or max(16, min(24, int(k * 30)))
+        for v in range(0, cw + 1, step):
+            col = ORANGE if v == 0 else INK2
+            self.add(f'<p style="position:absolute;left:{x + v * k - 40:.0f}px;top:{y - fs - 12:.0f}px;width:80px;'
+                     f'text-align:center;font-family:{MONO};font-size:{fs}px;font-weight:700;line-height:1;color:{col}">{v}</p>')
+        for v in range(step, ch + 1, step):
+            self.add(f'<p style="position:absolute;left:{x - 92:.0f}px;top:{y + v * k - fs * 0.6:.0f}px;width:80px;'
+                     f'text-align:right;font-family:{MONO};font-size:{fs}px;font-weight:700;line-height:1;color:{INK2}">{v}</p>')
+    if axes:
+        self.add(f'<svg style="position:absolute;left:0px;top:0px;overflow:visible" width="1920" height="1080">'
+                 f'<defs><marker id="pa{self.index}_{len(self.parts)}" markerWidth="22" markerHeight="20" refX="18" refY="10" '
+                 f'orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L22,10 L0,20 z" fill="{BLUE}"/></marker></defs>'
+                 f'<path d="M{x + w + 44:.0f} {y + 2} L{x + w + 92:.0f} {y + 2}" stroke="{BLUE}" stroke-width="4" '
+                 f'marker-end="url(#pa{self.index}_{len(self.parts)})"/>'
+                 f'<path d="M{x + 2} {y + h + 10:.0f} L{x + 2} {y + h + 56:.0f}" stroke="{BLUE}" stroke-width="4" '
+                 f'marker-end="url(#pa{self.index}_{len(self.parts)})"/></svg>')
+        self.text(int(x + w + 58), int(y + 8), 60, 40, "x", size=34, weight=800, color=BLUE, mono=True)
+        self.text(int(x + 16), int(y + h + 22), 60, 40, "y", size=34, weight=800, color=BLUE, mono=True)
+    return x, y, k
+
+
+def P(o, cx, cy):
+    """Координати полотна → точка на слайді."""
+    x0, y0, k = o
+    return x0 + cx * k, y0 + cy * k
+
+
+def _shape(self, o, kind, coords, fill="none", outline=INK, width=4, dash=False, arrow=False, opacity=1.0, smooth=False):
+    """Фігура поверх «полотна» (plane або скриншота): kind = rect | oval | line | polygon. Координати — полотна."""
+    x0, y0, k = o
+    pts = [(x0 + coords[i] * k, y0 + coords[i + 1] * k) for i in range(0, len(coords), 2)]
+    da = ' stroke-dasharray="12 8"' if dash else ""
+    st = f'fill="{fill}" stroke="{outline}" stroke-width="{width}"{da} opacity="{opacity}"'
+    mid = f"sa{self.index}_{len(self.parts)}"
+    defs = ""
+    if kind == "rect":
+        (ax, ay), (bx, by) = pts
+        el = f'<rect x="{min(ax, bx):.1f}" y="{min(ay, by):.1f}" width="{abs(bx - ax):.1f}" height="{abs(by - ay):.1f}" {st}/>'
+    elif kind == "oval":
+        (ax, ay), (bx, by) = pts
+        el = (f'<ellipse cx="{(ax + bx) / 2:.1f}" cy="{(ay + by) / 2:.1f}" rx="{abs(bx - ax) / 2:.1f}" '
+              f'ry="{abs(by - ay) / 2:.1f}" {st}/>')
+    elif kind == "polygon":
+        el = f'<polygon points="{" ".join(f"{a:.1f},{b:.1f}" for a, b in pts)}" {st}/>'
+    else:
+        if arrow:
+            defs = (f'<defs><marker id="{mid}" markerWidth="26" markerHeight="22" refX="22" refY="11" orient="auto" '
+                    f'markerUnits="userSpaceOnUse"><path d="M0,0 L26,11 L0,22 z" fill="{outline}"/></marker></defs>')
+        me = f' marker-end="url(#{mid})"' if arrow else ""
+        if smooth and len(pts) == 3:
+            d = f"M{pts[0][0]:.1f} {pts[0][1]:.1f} Q{pts[1][0]:.1f} {pts[1][1]:.1f} {pts[2][0]:.1f} {pts[2][1]:.1f}"
+            el = f'<path d="{d}" fill="none" stroke="{outline}" stroke-width="{width}"{da} stroke-linecap="round"{me}/>'
+        else:
+            el = (f'<polyline points="{" ".join(f"{a:.1f},{b:.1f}" for a, b in pts)}" fill="none" stroke="{outline}" '
+                  f'stroke-width="{width}"{da} stroke-linecap="round" stroke-linejoin="round" opacity="{opacity}"{me}/>')
+    self.add(f'<svg style="position:absolute;left:0px;top:0px;overflow:visible" width="1920" height="1080">{defs}{el}</svg>')
+
+
+def _dot(self, o, cx, cy, label=None, color=ORANGE, side="right", size=22, font=26, up=False, v=None, w=360):
+    """Точка на полотні з підписом (за замовчуванням — її координати).
+    side — підпис праворуч / ліворуч / по центру; v — над точкою (up), під нею (down) чи на рівні (mid)."""
+    sx, sy = P(o, cx, cy)
+    self.add(f'<div style="position:absolute;left:{sx - size / 2:.0f}px;top:{sy - size / 2:.0f}px;width:{size}px;'
+             f'height:{size}px;border-radius:50%;background:{color};border:3px solid #fff;box-sizing:border-box;'
+             f'box-shadow:0 0 0 2px {color}"></div>')
+    if label is None:
+        label = f"({cx}, {cy})"
+    if not label:
+        return
+    v = v or ("up" if up else ("down" if side == "center" else "mid"))
+    ty = {"up": sy - font - 16, "down": sy + size / 2 + 4, "mid": sy - font * 0.65}[v]
+    if side == "right":
+        lx, al = sx + (size / 2 + 8 if v == "mid" else 0), "left"
+    elif side == "left":
+        lx, al = sx - (size / 2 + 8 if v == "mid" else 0) - w, "right"
+    else:
+        lx, al = sx - w / 2, "center"
+    self.text(int(lx), int(ty), w, font + 10, label, size=font, weight=800, mono=True, color=color, align=al,
+              extra=";white-space:nowrap")
+
+
+Slide.window = _window_grid
 Slide.film = _film
 Slide.marker = _marker
+Slide.grid_over = _grid_over
+Slide.plane = _plane
+Slide.shape = _shape
+Slide.dot = _dot

@@ -18,7 +18,7 @@ PAINT = '''def малювати(подія):
 
 полотно.bind("<B1-Motion>", малювати)'''
 
-KEYS = '''герой = полотно.create_rectangle(270, 170, 330, 230,
+KEYS = '''герой = полотно.create_rectangle(470, 270, 530, 330,
                                 fill="orange")
 
 def ліворуч(подія):
@@ -42,9 +42,9 @@ def вниз(подія):
 GAME = '''import random
 
 рахунок = 0
-табло = полотно.create_text(80, 25, text="Зірок: 0", font=("Arial", 18))
-герой = полотно.create_rectangle(270, 320, 320, 370, fill="orange")
-зірка = полотно.create_oval(400, 100, 440, 140, fill="gold", outline="orange", width=3)
+табло = полотно.create_text(500, 30, text="Зірок: 0", font=("Arial", 24))
+герой = полотно.create_rectangle(470, 470, 520, 520, fill="orange")
+зірка = полотно.create_oval(600, 250, 640, 290, fill="gold", outline="orange", width=3)
 
 def перевірити():
     global рахунок
@@ -53,8 +53,8 @@ def перевірити():
     if зірка in поруч:
         рахунок += 1
         полотно.itemconfig(табло, text=f"Зірок: {рахунок}")
-        x = random.randint(20, 550)
-        y = random.randint(50, 350)
+        x = random.randint(20, 950)
+        y = random.randint(50, 550)
         полотно.coords(зірка, x, y, x + 40, y + 40)
 
 def ліворуч(подія):
@@ -87,7 +87,7 @@ def game_shot(keys):
     return shot(prog(GAME_SEEDED, title="Збирач зірок", bg="#EAF2FF"), sc)
 
 
-# маршрут, що збирає першу зірку (400..430, 100..130) з (270..320, 320..370)
+# маршрут, що збирає першу зірку (600..640, 250..290) з (470..520, 470..520)
 ROUTE1 = ["Right"] * 6 + ["Up"] * 10
 p1 = game_shot(ROUTE1)
 
@@ -123,15 +123,15 @@ with s.frame("pop"):
            kind="orange", title_size=34, body_size=30)
 
 # 4 — клік
-pc = shot(prog(CLICK, title="Клікни!"), [{"click": [120, 120]}, {"click": [300, 200]}, {"click": [480, 110]},
-                                          {"click": [200, 320]}, {"click": [420, 300]}])
+pc = shot(prog(CLICK, title="Клікни!"), [{"click": [180, 180]}, {"click": [450, 300]}, {"click": [780, 165]},
+                                          {"click": [300, 480]}, {"click": [700, 450]}])
 s = d.slide("Клік миші: bind",
             "Функція-обробник отримує параметр подія — без нього Python скаже про помилку. bind прив’язує подію до функції; "
             "зверніть увагу: ім’я функції без дужок, ми не викликаємо її, а лише кажемо, кого кликати. "
             "Скриншот — після п’яти кліків.")
 s.h2("Клік миші: bind")
 s.code(128, 214, 1000, 360, CLICK, size=27)
-o = s.window(1160, 214, 632, pc, title="Після 5 кліків")
+o = s.window(1160, 214, 632, pc, title="Після 5 кліків", grid=True)
 with s.frame():
     s.card(128, 610, 1000, 160, "Обробник отримує подію", c("def клацнули(подія):") + " — параметр обов’язковий.",
            kind="blue", title_size=32, body_size=28)
@@ -157,25 +157,25 @@ CLICK_SHORT = '''def клацнули(подія):
 
 полотно.bind("<Button-1>", клацнули)'''
 s.code(128, 560, 1000, 400, CLICK_SHORT, size=27, framed=False)
-s.window(1180, 216, 560, shot(prog(CLICK_SHORT, title="Клікни!"), [{"click": [120, 120]}, {"click": [300, 200]},
-                                                                   {"click": [480, 110]}, {"click": [200, 320]}]),
+s.window(1180, 216, 560, shot(prog(CLICK_SHORT, title="Клікни!"), [{"click": [180, 180]}, {"click": [450, 300]},
+                                                                   {"click": [780, 165]}, {"click": [300, 480]}]),
          title="Після 4 кліків")
 
 # 5 — що знає подія
-INFO = '''напис = полотно.create_text(300, 30, text="Клацни будь-де", font=("Arial", 16))
+INFO = '''напис = полотно.create_text(500, 80, text="Клацни будь-де", font=("Arial", 26))
 
 def клацнули(подія):
-    полотно.create_oval(подія.x - 5, подія.y - 5, подія.x + 5, подія.y + 5, fill="red")
+    полотно.create_oval(подія.x - 8, подія.y - 8, подія.x + 8, подія.y + 8, fill="red")
     полотно.itemconfig(напис, text=f"x = {подія.x}, y = {подія.y}")
 
 полотно.bind("<Button-1>", клацнули)'''
-pi = shot(prog(INFO, title="Координати кліку"), [{"click": [420, 260]}])
+pi = shot(prog(INFO, title="Координати кліку"), [{"click": [640, 390]}])
 s = d.slide("Що знає подія",
             "Подія — це не просто «клацнули». Вона знає, де саме: подія.x і подія.y — координати кліку на полотні. "
             "Ця програма пише координати прямо на полотні. Корисно, коли малюєте й не знаєте, які числа взяти.")
 s.h2("Що знає подія")
 s.code(128, 214, 1664, 300, INFO, size=24, framed=False)
-s.window(128, 550, 620, pi, title="Клікнули в (420, 260)")
+s.window(128, 550, 620, pi, title="Клікнули в (640, 390)", grid=True)
 with s.frame():
     s.card(800, 550, 992, 180, "Порада художнику", "Не знаєте, які координати взяти для малюнка? Запустіть цю програму й клацніть.",
            kind="blue", title_size=32, body_size=28)
@@ -184,8 +184,8 @@ with s.frame():
                                    ["подія.keysym", "назва клавіші: Left, space, a…"]], row_h=60, size=26)
 
 # 6 — малювалка
-path = [[80 + i * 10, 200 + int(60 * __import__("math").sin(i / 4))] for i in range(46)]
-path2 = [[150 + int(80 * __import__("math").cos(t / 6)), 300 + int(50 * __import__("math").sin(t / 6))] for t in range(40)]
+path = [[120 + i * 16, 300 + int(90 * __import__("math").sin(i / 4))] for i in range(46)]
+path2 = [[250 + int(130 * __import__("math").cos(t / 6)), 450 + int(80 * __import__("math").sin(t / 6))] for t in range(40)]
 pp = shot(prog(PAINT, title="Малювалка"), [{"drag": path}, {"drag": path2}])
 s = d.slide("Малювалка мишею",
             "<B1-Motion> — рух миші з натиснутою лівою кнопкою. Кожен маленький рух — нова подія, і на кожну ставимо крапку. "
@@ -209,9 +209,9 @@ s = d.slide("Клавіші-стрілки",
             "Два скриншоти: на старті й після восьми натискань праворуч і п’яти вгору.")
 s.h2("Клавіші-стрілки")
 s.code(128, 214, 1080, 830, KEYS, size=24, lh=1.38, framed=False)
-s.window(1260, 214, 532, k0, title="Старт")
+s.window(1260, 214, 532, k0, title="Старт", grid=True)
 with s.frame():
-    s.window(1260, 640, 532, k1, title="→ ×8, ↑ ×5")
+    s.window(1260, 640, 532, k1, title="→ ×8, ↑ ×5", grid=True)
 
 # 8 — focus
 s = d.slide("focus_set: куди йдуть клавіші",
@@ -256,7 +256,7 @@ with s.frame():
 
 # 10 — табло
 SCORE = '''рахунок = 0
-табло = полотно.create_text(300, 50, text="Рахунок: 0", font=("Arial", 28))
+табло = полотно.create_text(500, 60, text="Рахунок: 0", font=("Arial", 36))
 
 def клацнули(подія):
     global рахунок
@@ -359,7 +359,7 @@ with s.frame():
 with s.frame():
     s.mistake(720, 780, 1072, '''полотно.bind("<left>", ліворуч)''', "Назва з великої: " + c("<Left>"), code_h=80, size=25)
 
-KEYS2 = '''герой = полотно.create_rectangle(270, 170, 330, 230,
+KEYS2 = '''герой = полотно.create_rectangle(470, 270, 530, 330,
                                 fill="orange")
 
 def ліворуч(подія):

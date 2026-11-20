@@ -1,26 +1,25 @@
 """Python, урок 25. Полотно Canvas: вікно, координати, фігури."""
 import os
-from deck import Deck, c, esc, shot, REPO, INK, INK2, ORANGE, BLUE, DARK_BG, PAPER
+from deck import Deck, c, esc, shot, REPO, INK, INK2, ORANGE, BLUE, DARK_BG, PAPER, P
 from grafika import prog
 
 d = Deck("Полотно Canvas", kind="python", topic="Полотно Canvas")
 
 
 def at(o, cx, cy):
-    ox, oy, k = o
-    return ox + (cx + 1) * k, oy + (cy + 1) * k
+    return P(o, cx, cy)
 
 
 # 1 — титул
 full = prog('''
-полотно.create_rectangle(0, 300, 600, 400, fill="lightgreen", outline="")
-полотно.create_oval(460, 40, 560, 140, fill="gold", outline="orange", width=4)
-полотно.create_rectangle(120, 180, 300, 320, fill="lightyellow", outline="black", width=2)
-полотно.create_polygon(100, 180, 210, 90, 320, 180, fill="brown", outline="black", width=2)
-полотно.create_rectangle(190, 240, 235, 320, fill="saddlebrown")
-полотно.create_line(380, 320, 380, 230, fill="sienna", width=10)
-полотно.create_oval(330, 160, 430, 260, fill="forestgreen", outline="")
-полотно.create_text(300, 370, text="Мій перший малюнок", font=("Arial", 20), fill="darkgreen")
+полотно.create_rectangle(0, 450, 1000, 600, fill="lightgreen", outline="")
+полотно.create_oval(780, 60, 920, 200, fill="gold", outline="orange", width=4)
+полотно.create_rectangle(200, 270, 450, 450, fill="lightyellow", outline="black", width=2)
+полотно.create_polygon(170, 270, 325, 140, 480, 270, fill="brown", outline="black", width=2)
+полотно.create_rectangle(300, 360, 360, 450, fill="saddlebrown")
+полотно.create_line(650, 450, 650, 320, fill="sienna", width=14)
+полотно.create_oval(570, 180, 730, 340, fill="forestgreen", outline="")
+полотно.create_text(500, 540, text="Мій перший малюнок", font=("Arial", 28), fill="darkgreen")
 ''', title="Полотно")
 s = d.title("Python", "Полотно Canvas", "Фігури за координатами",
             notes="Сьогодні знайомимося з новим інструментом — полотном tkinter. На ньому фігури не малюють рухом, як черепашка, "
@@ -58,8 +57,8 @@ win = '''import tkinter
 вікно = tkinter.Tk()
 вікно.title("Малюємо на полотні")
 
-полотно = tkinter.Canvas(вікно, width=600,
-                         height=400, bg="white")
+полотно = tkinter.Canvas(вікно, width=1000,
+                         height=600, bg="white")
 полотно.pack()
 
 вікно.mainloop()'''
@@ -68,7 +67,7 @@ s = d.slide("Вікно з полотном",
             "pack() ставить полотно у вікно, mainloop() тримає вікно відкритим. Без mainloop вікно блимне й зникне.")
 s.h2("Вікно з полотном")
 s.code(128, 214, 990, 520, win, size=27)
-o = s.window(1150, 214, 642, shot(win))
+o = s.window(1150, 214, 642, shot(win), grid=True)
 items = [("Tk()", "створює вікно"), ("Canvas(…)", "полотно: ширина, висота, фон"), ("pack()", "ставить полотно у вікно"),
          ("mainloop()", "тримає вікно відкритим")]
 for k, (cmd, what) in enumerate(items):
@@ -79,70 +78,57 @@ for k, (cmd, what) in enumerate(items):
         s.text(x + 24, y, 200, 100, esc(cmd), size=26, weight=700, mono=True, color=BLUE, valign="center")
         s.text(x + 220, y, 236, 100, what, size=24, valign="center", lh=1.2)
 with s.frame():
-    s.text(1130, 760, 662, 200, "Порожнє біле полотно 600 × 400 — наш аркуш.", size=30, weight=600)
+    s.text(1150, 680, 642, 260, "Порожнє полотно 1000 × 600 — наш аркуш. Сітка — щоб рахувати клітинки (у програмі її немає).", size=30, weight=600)
 
 # 5 — координати
 s = d.slide("Координати: де нуль?",
             "Найважливіше на уроці. На полотні нуль — у лівому верхньому куті. x росте праворуч, y росте ВНИЗ, не вгору, як у математиці. "
-            "У черепашки нуль був у центрі. Питаємо: де точка (600, 400)? У правому нижньому куті.")
+            "У черепашки нуль був у центрі.\nОдна клітинка сітки — 50 точок; жирні лінії з числами — кожні 100.\n"
+            "Питаємо: де точка (1000, 600)? → У правому нижньому куті. А центр? → (500, 300).\n"
+            "Детально координати розбираємо на уроці 25а «Координати на полотні».")
 s.h2("Координати: де нуль?")
-s.sub("Нуль — у лівому верхньому куті. y росте <b>вниз</b>.")
-gx, gy, gw, gh = 200, 320, 900, 600
-s.raw(f'<div style="position:absolute;left:{gx}px;top:{gy}px;width:{gw}px;height:{gh}px;background:#fff;'
-      f'border:2px solid {DARK_BG};background-image:linear-gradient(#E3E8EE 2px,transparent 2px),'
-      f'linear-gradient(90deg,#E3E8EE 2px,transparent 2px);background-size:75px 75px"></div>')
-s.raw(f'<svg style="position:absolute;left:0px;top:0px" width="1920" height="1080" viewBox="0 0 1920 1080">'
-      f'<defs><marker id="ax" markerWidth="14" markerHeight="14" refX="10" refY="7" orient="auto">'
-      f'<path d="M0,0 L14,7 L0,14 z" fill="{BLUE}"/></marker></defs>'
-      f'<path d="M{gx} {gy - 30} L{gx + gw + 60} {gy - 30}" stroke="{BLUE}" stroke-width="5" marker-end="url(#ax)"/>'
-      f'<path d="M{gx - 30} {gy} L{gx - 30} {gy + gh + 50}" stroke="{BLUE}" stroke-width="5" marker-end="url(#ax)"/></svg>')
-s.text(gx + gw + 70, gy - 56, 60, 50, "x", size=40, weight=700, color=BLUE, mono=True)
-s.text(gx - 50, gy + gh + 40, 60, 50, "y", size=40, weight=700, color=BLUE, mono=True)
-s.marker(gx, gy, "(0, 0)", color=ORANGE, side="left")
+s.sub("Нуль — у лівому верхньому куті. y росте <b>вниз</b>. Клітинка = 50.")
+o = s.plane(220, 330, 960)
+s.dot(o, 0, 0, "(0, 0)", side="right", v="down")
 with s.frame():
-    s.marker(gx + 450, gy + 225, "(300, 150)", color=BLUE)
+    s.dot(o, 500, 300, "(500, 300)", color=BLUE)
 with s.frame():
-    s.marker(gx + gw, gy + gh, "(600, 400)", color=ORANGE, side="left")
+    s.dot(o, 1000, 600, "(1000, 600)", side="left", v="up")
 with s.frame():
-    s.card(1240, 320, 552, 280, "Не як у математиці!", ["y = 0 — це <b>верх</b> полотна.", "Що більше y — то нижче точка."],
+    s.card(1300, 330, 492, 280, "Не як у математиці!", ["y = 0 — це <b>верх</b> полотна.", "Що більше y — то нижче точка."],
            kind="orange", title_size=34, body_size=30, valign="flex-start")
 with s.frame():
-    s.card(1240, 640, 552, 280, "А в черепашки?", ["Нуль був у центрі, і y ріс угору.", "Тут — інакше."],
+    s.card(1300, 640, 492, 266, "А в черепашки?", ["Нуль був у центрі, і y ріс угору.", "Тут — інакше."],
            kind="light", title_size=34, body_size=30, valign="flex-start")
 
 # 6 — знайди точку
 s = d.slide("Знайди точку",
-            "Гра на швидкість. Показуємо точку — клас називає координати. Полотно 600 × 400, клітинка — 50. "
-            "Відповіді відкриваються кліком. Потім навпаки: називаємо координати, учень показує на дошці.")
+            "Гра на швидкість. Показуємо точку — клас називає координати. Полотно 1000 × 600, клітинка — 50. "
+            "Рахуємо клітинки: спершу праворуч (x), потім униз (y). Відповіді відкриваються кліком.\n"
+            "Потім навпаки: називаємо координати, учень показує на дошці.")
 s.h2("Знайди точку")
-s.sub("Полотно 600 × 400, одна клітинка — 50 точок.")
-gx, gy, gw, gh, k = 128, 300, 960, 640, 1.6
-s.raw(f'<div style="position:absolute;left:{gx}px;top:{gy}px;width:{gw}px;height:{gh}px;background:#fff;'
-      f'border:2px solid {DARK_BG};background-image:linear-gradient(#E3E8EE 2px,transparent 2px),'
-      f'linear-gradient(90deg,#E3E8EE 2px,transparent 2px);background-size:80px 80px"></div>')
-pts = [("A", 100, 50), ("B", 500, 100), ("C", 250, 300), ("D", 50, 350)]
+s.sub("Полотно 1000 × 600, одна клітинка — 50 точок.")
+o = s.plane(220, 330, 900)
+pts = [("A", 200, 100), ("B", 800, 150), ("C", 450, 400), ("D", 100, 500)]
 for name, x, y in pts:
-    px, py = gx + x * k, gy + y * k
-    s.raw(f'<div style="position:absolute;left:{px - 14}px;top:{py - 14}px;width:28px;height:28px;border-radius:50%;'
-          f'background:{BLUE}"></div>')
-    s.text(int(px + 18), int(py - 50), 60, 40, name, size=34, weight=800, color=BLUE)
+    s.dot(o, x, y, name, color=BLUE, font=34, size=28)
 for i, (name, x, y) in enumerate(pts):
-    s.text(1160, 320 + i * 150, 120, 110, f"<b>{name}</b>", size=48, color=BLUE, valign="center")
+    s.text(1250, 330 + i * 140, 90, 110, f"<b>{name}</b>", size=48, color=BLUE, valign="center")
     with s.frame("pop"):
-        s.chip(1260, 320 + i * 150, 532, 110, f"({x}, {y})", kind="blue", size=40)
+        s.chip(1340, 330 + i * 140, 452, 110, f"({x}, {y})", kind="blue", size=40)
 
 # 7 — прямокутник
-rect = 'полотно.create_rectangle(50, 50, 250, 150, fill="yellow", outline="black", width=3)'
+rect = 'полотно.create_rectangle(100, 100, 400, 250, fill="yellow", outline="black", width=3)'
 s = d.slide("Прямокутник за двома кутами",
             "Прямокутник задають двома кутами: лівим верхнім (x1, y1) і правим нижнім (x2, y2). "
-            "Ширина — це x2 − x1 = 200, висота — y2 − y1 = 100. Параметри fill, outline, width необов’язкові.")
+            "Ширина — це x2 − x1 = 300 (6 клітинок), висота — y2 − y1 = 150 (3 клітинки). Рахуємо по сітці. Параметри fill, outline, width необов’язкові.")
 s.h2("Прямокутник за двома кутами")
 s.code(128, 214, 1664, 120, rect, size=27, framed=False)
-o = s.window(128, 370, 900, shot(prog(rect)))
+o = s.window(128, 370, 900, shot(prog(rect)), grid=True)
 with s.frame():
-    s.marker(*at(o, 50, 50), "(50, 50)", side="left")
+    s.dot(o, 100, 100, "(100, 100)", side="right", v="up", font=24, size=18)
 with s.frame():
-    s.marker(*at(o, 250, 150), "(250, 150)")
+    s.marker(*at(o, 400, 250), "(400, 250)")
 with s.frame():
     s.card(1080, 370, 712, 250, "Лівий верхній → правий нижній",
            [c("x1, y1") + " — один кут, " + c("x2, y2") + " — протилежний."], kind="blue", title_size=32, body_size=29)
@@ -151,28 +137,28 @@ with s.frame():
                                     ["width", "товщина контуру"]], row_h=66, size=28)
 
 # 7а — зроби зараз
-first = 'полотно.create_rectangle(50, 50, 250, 150, fill="yellow")'
+first = 'полотно.create_rectangle(100, 100, 400, 250, fill="yellow")'
 s = d.now("Зроби зараз: вікно й перша фігура",
           "Перший запуск у кожного до кінця пояснення. Заготовку вікна можна роздати файлом, щоб не витрачати час на набір. "
           "Хто впорався — пересуває прямокутник, змінюючи лише перші два числа.", minutes=4)
-s.steps(["Наберіть заготовку вікна зі слайда «Вікно з полотном».",
+s.steps(["Відкрийте заготовку вікна (файл від учителя) або наберіть: " + c("Tk()") + ", " + c("Canvas(вікно, width=1000, height=600)") + ", " + c("pack()") + ", " + c("mainloop()") + ".",
          "Перед " + c("mainloop()") + " додайте прямокутник з картки праворуч.",
          "Запустіть <b>F5</b>. Жовтий прямокутник є?",
          "Змініть колір на свій і пересуньте прямокутник у правий нижній кут."], w=860, size=31)
-s.code(1060, 216, 732, 160, 'полотно.create_rectangle(\n    50, 50, 250, 150, fill="yellow")', size=27, framed=False)
-s.window(1060, 410, 600, shot(prog(first)), title="Має вийти так")
+s.code(1060, 216, 732, 160, 'полотно.create_rectangle(\n    100, 100, 400, 250, fill="yellow")', size=27, framed=False)
+s.window(1060, 410, 732, shot(prog(first)), title="Має вийти так (сітка — для лічби)", grid=True)
 
 # 8 — овал
-oval = '''полотно.create_rectangle(50, 50, 250, 150, outline="gray", dash=(6, 4))
-полотно.create_oval(50, 50, 250, 150, fill="red")
-полотно.create_rectangle(320, 50, 470, 200, outline="gray", dash=(6, 4))
-полотно.create_oval(320, 50, 470, 200, fill="dodgerblue")'''
+oval = '''полотно.create_rectangle(100, 100, 450, 300, outline="gray", dash=(6, 4))
+полотно.create_oval(100, 100, 450, 300, fill="red")
+полотно.create_rectangle(550, 100, 800, 350, outline="gray", dash=(6, 4))
+полотно.create_oval(550, 100, 800, 350, fill="dodgerblue")'''
 s = d.slide("Овал у невидимій рамці",
             "Овал задають так само, як прямокутник: двома кутами рамки, у яку він вписаний. Сіра пунктирна рамка — лише для пояснення, "
             "у справжній програмі її немає. Якщо рамка квадратна, вийде коло. Питаємо: як намалювати коло радіусом 50 з центром у (300, 200)?")
 s.h2("Овал у невидимій рамці")
 s.code(128, 214, 1664, 210, oval, size=25, framed=False)
-s.window(128, 460, 780, shot(prog(oval)))
+s.window(128, 460, 780, shot(prog(oval)), grid=True)
 with s.frame():
     s.card(980, 460, 812, 200, "Рамка прямокутна", "вийде овал", kind="light", title_size=34, body_size=30)
 with s.frame():
@@ -183,16 +169,16 @@ with s.frame():
            size=26, weight=600)
 
 # 9 — лінія
-line = '''полотно.create_line(0, 0, 600, 400, fill="blue", width=2)
-полотно.create_line(50, 350, 150, 250, 250, 350, 350, 250, 450, 350, fill="green", width=6)'''
+line = '''полотно.create_line(0, 0, 1000, 600, fill="blue", width=2)
+полотно.create_line(100, 500, 300, 350, 500, 500, 700, 350, 900, 500, fill="green", width=6)'''
 s = d.slide("Лінія й ламана",
             "Лінія — від точки до точки. Якщо дати більше пар чисел, вийде ламана: Python з’єднає всі точки по черзі. "
             "Друга лінія тут — п’ять точок, зигзаг.")
 s.h2("Лінія й ламана")
 s.code(128, 214, 1664, 170, line, size=25, framed=False)
-o = s.window(128, 420, 820, shot(prog(line)))
+o = s.window(128, 420, 820, shot(prog(line)), grid=True)
 with s.frame():
-    for (x, y) in [(50, 350), (150, 250), (250, 350), (350, 250), (450, 350)]:
+    for (x, y) in [(100, 500), (300, 350), (500, 500), (700, 350), (900, 500)]:
         sx, sy = at(o, x, y)
         s.raw(f'<div style="position:absolute;left:{sx - 10}px;top:{sy - 10}px;width:20px;height:20px;border-radius:50%;'
               f'background:{ORANGE};border:3px solid #fff"></div>')
@@ -204,34 +190,34 @@ with s.frame():
            body_size=30)
 
 # 10 — текст
-txt = '''полотно.create_text(300, 60, text="Мій малюнок", font=("Arial", 32), fill="navy")
-полотно.create_text(300, 200, text="центр тексту — тут", font=("Arial", 20))
-полотно.create_oval(295, 195, 305, 205, fill="red")'''
+txt = '''полотно.create_text(500, 80, text="Мій малюнок", font=("Arial", 40), fill="navy")
+полотно.create_text(500, 300, text="центр тексту — тут", font=("Arial", 28))
+полотно.create_oval(494, 294, 506, 306, fill="red")'''
 s = d.slide("Текст на полотні",
-            "Текст ставлять за координатами його ЦЕНТРУ — червона точка показує, де саме. Тому create_text(300, …) — "
-            "текст рівно посередині полотна шириною 600. font — шрифт і розмір, fill — колір.")
+            "Текст ставлять за координатами його ЦЕНТРУ — червона точка показує, де саме. Тому create_text(500, …) — "
+            "текст рівно посередині полотна шириною 1000. font — шрифт і розмір, fill — колір.")
 s.h2("Текст на полотні")
 s.code(128, 214, 1664, 210, txt, size=25, framed=False)
-s.window(128, 460, 780, shot(prog(txt)))
+s.window(128, 460, 780, shot(prog(txt)), grid=True)
 with s.frame():
     s.card(980, 460, 812, 220, "Координати — це центр", "Червона точка: саме туди ставиться середина тексту.",
            kind="orange", title_size=34, body_size=29)
 with s.frame():
-    s.card(980, 710, 812, 220, "Шрифт", c('font=("Arial", 32)') + " — назва і розмір", kind="light", title_size=34,
+    s.card(980, 710, 812, 220, "Шрифт", c('font=("Arial", 40)') + " — назва і розмір", kind="light", title_size=34,
            body_size=29)
 
 # 11 — кольори
 cols = ["red", "orange", "gold", "green", "dodgerblue", "purple", "pink", "brown", "gray", "skyblue", "lightgreen", "black"]
 body = "\n".join(
-    f'полотно.create_rectangle({20 + (i % 4) * 145}, {20 + (i // 4) * 125}, {145 + (i % 4) * 145}, {120 + (i // 4) * 125}, '
-    f'fill="{cname}")\nполотно.create_text({82 + (i % 4) * 145}, {70 + (i // 4) * 125}, text="{cname}", fill="white", '
-    f'font=("Arial", 14, "bold"))' for i, cname in enumerate(cols))
+    f'полотно.create_rectangle({20 + (i % 4) * 245}, {20 + (i // 4) * 195}, {245 + (i % 4) * 245}, {195 + (i // 4) * 195}, '
+    f'fill="{cname}")\nполотно.create_text({132 + (i % 4) * 245}, {107 + (i // 4) * 195}, text="{cname}", fill="white", '
+    f'font=("Arial", 22, "bold"))' for i, cname in enumerate(cols))
 s = d.slide("Кольори",
             "Колір пишуть англійською назвою в лапках. Цих дванадцяти вистачить на будь-який малюнок. "
             "Якщо назву написати з помилкою, Python скаже unknown color name. Коди кольорів з решіткою — для допитливих, на уроці не потрібні.")
 s.h2("Кольори")
 s.sub("Назва англійською — у лапках.")
-s.window(128, 300, 900, shot(prog(body, h=390)))
+s.window(128, 300, 900, shot(prog(body)))
 with s.frame():
     s.card(1080, 300, 712, 260, "Приклад", c('fill="gold"') + ", " + c('outline="black"'), kind="light",
            title_size=34, body_size=29)
@@ -240,22 +226,22 @@ with s.frame():
            title_size=34, body_size=29)
 
 # 12 — збираємо малюнок: світлофор і смайлик
-light = '''полотно.create_rectangle(80, 40, 200, 360, fill="#3E3F42")
-полотно.create_oval(100, 60, 180, 140, fill="red")
-полотно.create_oval(100, 160, 180, 240, fill="gray")
-полотно.create_oval(100, 260, 180, 340, fill="gray")
+light = '''полотно.create_rectangle(120, 60, 300, 540, fill="#3E3F42")
+полотно.create_oval(150, 90, 270, 210, fill="red")
+полотно.create_oval(150, 240, 270, 360, fill="gray")
+полотно.create_oval(150, 390, 270, 510, fill="gray")
 
-полотно.create_oval(300, 80, 540, 320, fill="gold")
-полотно.create_oval(360, 150, 390, 190, fill="black")
-полотно.create_oval(450, 150, 480, 190, fill="black")
-полотно.create_line(370, 250, 420, 280, 470, 250,
-                    width=6, smooth=True)'''
+полотно.create_oval(510, 120, 870, 480, fill="gold")
+полотно.create_oval(600, 225, 645, 285, fill="black")
+полотно.create_oval(735, 225, 780, 285, fill="black")
+полотно.create_line(615, 375, 690, 420, 765, 375,
+                    width=9, smooth=True)'''
 s = d.slide("Збираємо малюнок",
             "Будь-який малюнок — це прості фігури. Світлофор — прямокутник і три кола. Смайлик — велике коло, два овали-очі й ламана-усмішка "
             "з параметром smooth=True, який згладжує кути. Фігури малюються по черзі: пізніша лягає зверху.")
 s.h2("Збираємо малюнок")
 s.code(128, 214, 1000, 530, light, size=26, lh=1.45, framed=False)
-s.window(1160, 214, 632, shot(prog(light, title="Світлофор і смайлик")))
+s.window(1160, 214, 632, shot(prog(light, title="Світлофор і смайлик")), grid=True)
 with s.frame():
     s.card(1160, 690, 632, 190, "Хто зверху?", "Що намалювали пізніше — те лягає поверх.", kind="blue", title_size=32,
            body_size=28)
@@ -264,12 +250,12 @@ with s.frame():
            body_size=28)
 
 # 13 — що намалює
-qs = ['полотно.create_rectangle(\n    100, 100, 500, 300,\n    fill="blue")',
-      'полотно.create_oval(\n    200, 100, 400, 300,\n    fill="green")',
-      'полотно.create_line(\n    0, 200, 600, 200, width=8)\nполотно.create_line(\n    300, 0, 300, 400, width=8)']
+qs = ['полотно.create_rectangle(\n    200, 150, 800, 450,\n    fill="blue")',
+      'полотно.create_oval(\n    350, 150, 650, 450,\n    fill="green")',
+      'полотно.create_line(\n    0, 300, 1000, 300, width=8)\nполотно.create_line(\n    500, 0, 500, 600, width=8)']
 s = d.slide("Що намалює програма?",
             "Клас малює відповідь на листочку чи в повітрі, потім відкриваємо справжній результат. "
-            "Друга — коло, бо рамка 200 на 200. Третя — хрест посередині.")
+            "Друга — коло, бо рамка 300 на 300. Третя — хрест посередині.\nПідказка: рахуйте по сітці на відповіді — одна клітинка 50.")
 s.h2("Що намалює програма?")
 for k, q in enumerate(qs):
     x = 128 + k * 568
@@ -277,7 +263,7 @@ for k, q in enumerate(qs):
 for k, q in enumerate(qs):
     x = 128 + k * 568
     with s.frame("pop"):
-        s.window(x, 470, 524, shot(prog(q)), title="Відповідь")
+        s.window(x, 470, 524, shot(prog(q)), title="Відповідь", grid=True)
 
 # 14 — типові помилки
 s = d.slide("Типові помилки",
@@ -286,7 +272,7 @@ s = d.slide("Типові помилки",
 s.text(128, 420, 560, 240, "Типові<br/>помилки", size=96, weight=700, lh=1.02, extra=";letter-spacing:-3px")
 s.text(128, 860, 540, 120, "Python скаже лише про колір. Решту видно тільки по вікну.", size=26, color=INK2, lh=1.35)
 with s.frame():
-    s.mistake(720, 130, 1072, '''полотно = tkinter.Canvas(вікно, width=600, height=400)
+    s.mistake(720, 130, 1072, '''полотно = tkinter.Canvas(вікно, width=1000, height=600)
 # забули полотно.pack()''', "Без " + c("pack()") + " полотна у вікні не буде", code_h=110, size=24)
 with s.frame():
     s.mistake(720, 370, 1072, '''полотно.create_oval(10, 10, 90, 90)
@@ -295,21 +281,21 @@ with s.frame():
     s.mistake(720, 610, 1072, '''полотно.create_rectangle(10, 10, 90, 90, fill="yelow")''',
               c("unknown color name") + ": колір з помилкою", code_h=80, size=24)
 with s.frame():
-    s.mistake(720, 820, 1072, '''полотно.create_rectangle(50, 300, 150, 500)''',
+    s.mistake(720, 820, 1072, '''полотно.create_rectangle(100, 500, 300, 700)''',
               "Друге число — " + c("y") + " кута, а не висота: вилізли за низ", code_h=80, size=24)
 
-SMILE = '''полотно.create_oval(150, 50, 450, 350, fill="gold")
-полотно.create_oval(220, 130, 260, 180, fill="black")
-полотно.create_oval(340, 130, 380, 180, fill="black")
-полотно.create_line(230, 260, 300, 300, 370, 260,
-                    width=8, smooth=True)'''
-SAD = SMILE.replace("230, 260, 300, 300, 370, 260", "230, 290, 300, 250, 370, 290").replace('"gold"', '"lightblue"', 1)
-FLAG = '''полотно.create_line(100, 60, 100, 380, width=8, fill="sienna")
-полотно.create_rectangle(100, 60, 500, 160, fill="dodgerblue")
-полотно.create_rectangle(100, 160, 500, 260, fill="gold")'''
-FLAG_GAPS = '''полотно.create_line(100, 60, 100, 380, width=8, fill="sienna")
-полотно.create_rectangle(100, 60, 500, 160, fill="___")
-полотно.create_rectangle(100, ___, 500, ___, fill="gold")'''
+SMILE = '''полотно.create_oval(275, 75, 725, 525, fill="gold")
+полотно.create_oval(380, 195, 440, 270, fill="black")
+полотно.create_oval(560, 195, 620, 270, fill="black")
+полотно.create_line(395, 390, 500, 450, 605, 390,
+                    width=10, smooth=True)'''
+SAD = SMILE.replace("395, 390, 500, 450, 605, 390", "395, 435, 500, 375, 605, 435").replace('"gold"', '"lightblue"', 1)
+FLAG = '''полотно.create_line(150, 90, 150, 570, width=10, fill="sienna")
+полотно.create_rectangle(150, 90, 750, 240, fill="dodgerblue")
+полотно.create_rectangle(150, 240, 750, 390, fill="gold")'''
+FLAG_GAPS = '''полотно.create_line(150, 90, 150, 570, width=10, fill="sienna")
+полотно.create_rectangle(150, 90, 750, 240, fill="___")
+полотно.create_rectangle(150, ___, 750, ___, fill="gold")'''
 
 # 15 — ваш хід
 d.your_turn([("edit", "Рівень 1: зміни смайлик"), ("star", "Рівень 2: допиши прапор"),
@@ -327,7 +313,7 @@ d.levels([("Зміни", "готовий смайлик", ["Інші кольо�
 
 # 16 — рівень 1
 s = d.task("Рівень 1. Зміни смайлик",
-           "Сумний смайлик: у ламаній середня точка стає вищою за крайні — (230, 290, 300, 250, 370, 290). "
+           "Сумний смайлик: у ламаній середня точка стає вищою за крайні — (395, 435, 500, 375, 605, 435). "
            "Рум’янці — два рожеві овали під очима, їх треба малювати після обличчя, інакше обличчя їх закриє.")
 s.code(128, 216, 900, 270, SMILE, size=25, framed=False)
 s.steps(["Наберіть смайлик і запустіть.",
@@ -335,32 +321,32 @@ s.steps(["Наберіть смайлик і запустіть.",
          "Зробіть очі більшими — змініть числа овалів.",
          "Сумний смайлик: середня точка усмішки — <b>вище</b> за крайні.",
          "Додайте рожеві рум’янці під очима."], x=128, y=520, w=900, size=29)
-s.window(1080, 216, 330, shot(prog(SMILE, title="Смайлик")), title="Було")
+s.window(1080, 216, 330, shot(prog(SMILE, title="Смайлик")), title="Було", grid="lines")
 with s.frame():
-    s.window(1450, 216, 330, shot(prog(SAD, title="Смайлик")), title="Стало")
+    s.window(1450, 216, 330, shot(prog(SAD, title="Смайлик")), title="Стало", grid="lines")
 
 # 17 — рівень 2
 s = d.task("Рівень 2. Допиши прапор",
-           "Відповіді: перша смуга dodgerblue (синій), друга смуга від 160 до 260 — висота така сама, 100. "
-           "Сонце: create_oval у правому верхньому куті, наприклад (500, 20, 580, 100).")
+           "Відповіді: перша смуга dodgerblue (синій), друга смуга від 240 до 390 — висота така сама, 150 (3 клітинки). "
+           "Сонце: create_oval у правому верхньому куті, наприклад (850, 30, 970, 150).")
 s.code(128, 216, 1000, 230, FLAG_GAPS, size=25, framed=False)
 s.steps(["Заповніть пропуски " + c("___") + ": колір верхньої смуги і де починається та закінчується нижня.",
-         "Обидві смуги мають однакову висоту — 100.",
+         "Обидві смуги мають однакову висоту — 150 (3 клітинки).",
          "Додайте сонце в правому верхньому куті.",
          "Унизу — підпис " + c("create_text") + ": «Україна»."], x=128, y=480, w=1000, size=29)
-s.window(1180, 216, 600, shot(prog(FLAG, title="Прапор")), title="Має вийти так")
+s.window(1180, 216, 600, shot(prog(FLAG, title="Прапор")), title="Має вийти так", grid=True)
 
 # 17а — рівень 3
-target = '''полотно.create_oval(100, 0, 500, 400, fill="red")
-полотно.create_oval(140, 40, 460, 360, fill="white")
-полотно.create_oval(180, 80, 420, 320, fill="red")
-полотно.create_oval(220, 120, 380, 280, fill="white")
-полотно.create_oval(260, 160, 340, 240, fill="red")'''
+target = '''полотно.create_oval(200, 0, 800, 600, fill="red")
+полотно.create_oval(260, 60, 740, 540, fill="white")
+полотно.create_oval(320, 120, 680, 480, fill="red")
+полотно.create_oval(380, 180, 620, 420, fill="white")
+полотно.create_oval(440, 240, 560, 360, fill="red")'''
 s = d.task("Рівень 3. Мій малюнок",
-           "Малюнок оцінюємо за кількістю різних фігур і охайністю координат. Мішень: кожне наступне коло на 40 точок менше "
-           "з кожного боку, малювати від найбільшого; циклом — координати через i * 40.")
+           "Малюнок оцінюємо за кількістю різних фігур і охайністю координат. Мішень: кожне наступне коло на 60 точок менше "
+           "з кожного боку, малювати від найбільшого; циклом — координати через i * 60.")
 s.steps(["Намалюйте своє: емодзі, робота, хатинку з сонцем — <b>щонайменше 6 фігур</b>.",
-         "Спершу накидайте малюнок на клітинках у зошиті — так легше з координатами.",
+         "Спершу накидайте малюнок на клітинках у зошиті: рамка 20 × 12 клітинок, клітинка = 50.",
          "Використайте " + c("rectangle") + ", " + c("oval") + ", " + c("line") + " і " + c("text") + ".",
          "⭐ Мішень із п’яти кіл — циклом " + c("for") + "."], w=860, size=30)
 s.window(1060, 216, 340, shot(full), title="Хатинка")
@@ -369,16 +355,14 @@ s.window(1440, 216, 340, shot(prog(target, title="Мішень")), title="⭐ М
 # 18 — без комп'ютера
 s = d.task("Без комп’ютера: фігури на клітинках",
            "Відповіді: 1) прямокутник від (100, 50) до (300, 150) — ширина 200, висота 100; 2) коло з центром (200, 200) радіусом 50 — "
-           "create_oval(150, 150, 250, 250); 3) лінія з лівого нижнього кута в правий верхній — create_line(0, 400, 600, 0).",
+           "create_oval(150, 150, 250, 250); 3) лінія з лівого нижнього кута в правий верхній — create_line(0, 600, 1000, 0).",
            where="У зошиті")
-s.steps(["Накресліть полотно 12 × 8 клітинок: одна клітинка — 50 точок. Позначте (0, 0) і напрямки x та y.",
+s.steps(["Накресліть полотно 20 × 12 клітинок: одна клітинка — 50 точок. Позначте (0, 0) і напрямки x та y.",
          "Намалюйте на клітинках: " + c("create_rectangle(100, 50, 300, 150)") + ".",
          "Запишіть команду для кола з центром (200, 200) і радіусом 50.",
          "Запишіть команду для лінії з лівого нижнього кута в правий верхній."], w=1000, size=30)
-s.raw(f'<div style="position:absolute;left:1220px;top:230px;width:572px;height:382px;background:#fff;'
-      f'border:2px solid {DARK_BG};background-image:linear-gradient(#E3E8EE 2px,transparent 2px),'
-      f'linear-gradient(90deg,#E3E8EE 2px,transparent 2px);background-size:47.6px 47.6px"></div>')
-s.text(1220, 630, 572, 50, "12 × 8 клітинок, клітинка = 50", size=26, weight=600, align="center", color=INK2)
+s.plane(1230, 260, 560)
+s.text(1150, 680, 642, 50, "20 × 12 клітинок, клітинка = 50", size=26, weight=600, align="center", color=INK2)
 
 out = os.path.join(REPO, "Презентації уроків", "Python", "Урок 25. Полотно Canvas.html")
 print(d.save(out), len(d.slides))

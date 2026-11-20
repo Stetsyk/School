@@ -1,14 +1,13 @@
 """Python, урок 26. Хатинка з фігур. Проєкт «Вулиця»."""
 import os
-from deck import Deck, c, esc, shot, REPO, INK, INK2, ORANGE, BLUE, DARK_BG, PAPER
+from deck import Deck, c, esc, shot, REPO, INK, INK2, ORANGE, BLUE, DARK_BG, PAPER, P as PP
 from grafika import prog
 
 d = Deck("Хатинка й вулиця", kind="python", topic="Хатинка й вулиця")
 
 
 def at(o, cx, cy):
-    ox, oy, k = o
-    return ox + (cx + 1) * k, oy + (cy + 1) * k
+    return PP(o, cx, cy)
 
 
 HOUSE_FN = '''def хатинка(x, y, колір):
@@ -32,18 +31,18 @@ STREET = f'''import random
 
 {TREE_FN}
 
-полотно.create_rectangle(0, 0, 600, 280, fill="skyblue", outline="")
-полотно.create_oval(480, 30, 560, 110, fill="gold", outline="")
-полотно.create_rectangle(0, 280, 600, 400, fill="lightgreen", outline="")
+полотно.create_rectangle(0, 0, 1000, 420, fill="skyblue", outline="")
+полотно.create_oval(850, 40, 950, 140, fill="gold", outline="")
+полотно.create_rectangle(0, 420, 1000, 600, fill="lightgreen", outline="")
 
 кольори = ["lightyellow", "pink", "lightblue", "wheat", "lavender"]
 random.seed(4)
-for i in range(4):
-    хатинка(30 + i * 145, 230, random.choice(кольори))
-for i in range(5):
-    дерево(15 + i * 145, 380)
+for i in range(6):
+    хатинка(40 + i * 160, 340, random.choice(кольори))
+for i in range(6):
+    дерево(95 + i * 160, 560)
 
-полотно.create_text(300, 385, text="Вулиця Сонячна", font=("Arial", 14))'''
+полотно.create_text(500, 585, text="Вулиця Сонячна", font=("Arial", 18))'''
 
 # 1 — титул
 s = d.title("Python", "Хатинка й вулиця", "Функції та цикли на полотні",
@@ -58,18 +57,18 @@ d.plan(["Хатинка — це п’ять фігур", "Трикутник: c
        notes="Головна ідея уроку: описати хатинку один раз — і ставити скільки завгодно.")
 
 # 3 — гачок
-parts = '''полотно.create_rectangle(200, 180, 400, 340, fill="lightyellow", width=2)
-полотно.create_polygon(180, 180, 300, 80, 420, 180, fill="brown", width=2, outline="black")
-полотно.create_rectangle(280, 260, 320, 340, fill="saddlebrown")
-полотно.create_rectangle(220, 210, 260, 250, fill="lightblue")
-полотно.create_rectangle(340, 210, 380, 250, fill="lightblue")
-полотно.create_rectangle(350, 90, 375, 150, fill="gray")'''
+parts = '''полотно.create_rectangle(350, 270, 650, 510, fill="lightyellow", width=2)
+полотно.create_polygon(320, 270, 500, 120, 680, 270, fill="brown", width=2, outline="black")
+полотно.create_rectangle(470, 390, 530, 510, fill="saddlebrown")
+полотно.create_rectangle(380, 315, 440, 375, fill="lightblue")
+полотно.create_rectangle(560, 315, 620, 375, fill="lightblue")
+полотно.create_rectangle(575, 135, 615, 225, fill="gray")'''
 s = d.slide("Хатинка — це п’ять фігур",
             "Подивіться на дитячий малюнок будинку: квадрат — стіни, трикутник — дах, квадратики — вікна, прямокутник — двері, "
             "вузький прямокутник — комин. Усе це вже вміємо, крім трикутника. Його навчимося зараз.")
 s.h2("Хатинка — це п’ять фігур")
 s.sub("Стіни, дах, двері, вікна, комин. Усі, крім даху, — прямокутники.")
-s.window(128, 300, 860, shot(prog(parts, title="Хатинка")))
+s.window(128, 300, 860, shot(prog(parts, title="Хатинка")), grid=True)
 names = [("Стіни", "прямокутник", "light"), ("Дах", "трикутник — новий!", "orange"), ("Двері", "прямокутник", "light"),
          ("Вікна", "два квадрати", "light"), ("Комин", "вузький прямокутник", "light")]
 for k, (n, f, kind) in enumerate(names):
@@ -77,15 +76,15 @@ for k, (n, f, kind) in enumerate(names):
         s.card(1040, 300 + k * 128, 752, 108, None, f"<b>{n}</b> — {f}", kind=kind, body_size=32)
 
 # 4 — polygon
-tri = 'полотно.create_polygon(100, 300, 300, 80, 500, 300, fill="brown", outline="black", width=3)'
+tri = 'полотно.create_polygon(200, 450, 500, 120, 800, 450, fill="brown", outline="black", width=3)'
 s = d.slide("Трикутник: create_polygon",
             "create_polygon з’єднує точки по черзі й замикає фігуру — остання точка з’єднується з першою. "
             "Три точки — трикутник, чотири — чотирикутник, скільки завгодно — будь-який багатокутник. "
             "Без outline контуру не буде — лише заливка.")
 s.h2("Трикутник: create_polygon")
 s.code(128, 214, 1664, 120, tri, size=26, framed=False)
-o = s.window(128, 370, 860, shot(prog(tri, title="Трикутник")))
-for i, (x, y, side) in enumerate([(100, 300, "left"), (300, 80, "right"), (500, 300, "right")]):
+o = s.window(128, 370, 860, shot(prog(tri, title="Трикутник")), grid=True)
+for i, (x, y, side) in enumerate([(200, 450, "left"), (500, 120, "right"), (800, 450, "right")]):
     with s.frame():
         s.marker(*at(o, x, y), f"({x}, {y})", side=side)
 with s.frame():
@@ -98,55 +97,41 @@ with s.frame():
 # 5 — креслення
 s = d.slide("Спершу креслення, потім код",
             "Найкорисніша звичка уроку: спершу намалювати хатинку на клітинках і підписати координати кутів. "
-            "Код пишеться потім за хвилину, і в ньому не буде помилок. Одна клітинка тут — 20 точок.")
+            "Код пишеться потім за хвилину, і в ньому не буде помилок. Одна клітинка — 50 точок, як і на всіх наших полотнах.\n"
+            "Питаємо: де вершина даху? → 7 клітинок праворуч, 2 вниз: (350, 100).")
 s.h2("Спершу креслення, потім код")
-gx, gy, cell = 128, 230, 30
-cols, rows = 20, 14
-s.raw(f'<div style="position:absolute;left:{gx}px;top:{gy}px;width:{cols * cell}px;height:{rows * cell}px;background:#fff;'
-      f'border:2px solid {DARK_BG};background-image:linear-gradient(#E3E8EE 2px,transparent 2px),'
-      f'linear-gradient(90deg,#E3E8EE 2px,transparent 2px);background-size:{cell}px {cell}px"></div>')
-k = cell / 20  # клітинка = 20 точок полотна
-
-
-def P(x, y):
-    return gx + x * k, gy + y * k
-
-
-# хатинка на кресленні: x=100, y=150
-pts_wall = [P(100, 150), P(300, 150), P(300, 270), P(100, 270)]
-s.raw(f'<svg style="position:absolute;left:0px;top:0px" width="1920" height="1080" viewBox="0 0 1920 1080">'
-      f'<rect x="{P(100, 150)[0]}" y="{P(100, 150)[1]}" width="{200 * k}" height="{120 * k}" fill="none" stroke="{INK}" stroke-width="4"/>'
-      f'<polygon points="{P(80, 150)[0]},{P(80, 150)[1]} {P(200, 50)[0]},{P(200, 50)[1]} {P(320, 150)[0]},{P(320, 150)[1]}" '
-      f'fill="none" stroke="{ORANGE}" stroke-width="4"/>'
-      f'<rect x="{P(180, 200)[0]}" y="{P(180, 200)[1]}" width="{40 * k}" height="{70 * k}" fill="none" stroke="{BLUE}" stroke-width="4"/></svg>')
-labels = [(300, 270, "(300, 270)", "right"), (200, 50, "(200, 50)", "right"),
-          (80, 150, "(80, 150)", "left"), (320, 150, "(320, 150)", "right")]
-for x, y, t, side in labels:
+o = s.plane(220, 270, 740)
+s.shape(o, "rect", [200, 250, 500, 450], outline=INK, width=4)
+s.shape(o, "polygon", [150, 250, 350, 100, 550, 250], outline=ORANGE, width=4)
+s.shape(o, "rect", [300, 350, 400, 450], outline=BLUE, width=4)
+labels = [(500, 450, "(500, 450)", "right", "mid", BLUE), (350, 100, "(350, 100)", "right", "mid", ORANGE),
+          (150, 250, "(150, 250)", "right", "down", ORANGE), (550, 250, "(550, 250)", "right", "mid", ORANGE)]
+for x, y, t, side, v, col in labels:
     with s.frame():
-        s.marker(*P(x, y), t, color=ORANGE if y in (50,) or x in (80, 320) else BLUE, side=side)
+        s.dot(o, x, y, t, color=col, side=side, v=v, font=24, size=18)
 with s.frame():
-    s.code(900, 230, 892, 360, '''# стіни
-create_rectangle(100, 150, 300, 270)
+    s.code(1080, 230, 712, 360, '''# стіни
+create_rectangle(200, 250, 500, 450)
 # дах
-create_polygon(80, 150, 200, 50, 320, 150)
+create_polygon(150, 250, 350, 100, 550, 250)
 # двері
-create_rectangle(180, 200, 220, 270)''', size=26, framed=False)
+create_rectangle(300, 350, 400, 450)''', size=26, framed=False)
 with s.frame():
-    s.card(900, 620, 892, 210, "Клітинка = 20 точок",
+    s.card(1080, 620, 712, 210, "Клітинка = 50 точок",
            "Кути фігур — на перетинах ліній. Підписали — і код майже готовий.", kind="blue", title_size=32, body_size=28)
 
 # 6 — хатинка кодом
-house_abs = '''полотно.create_rectangle(100, 150, 300, 270, fill="lightyellow")
-полотно.create_polygon(80, 150, 200, 50, 320, 150, fill="brown")
-полотно.create_rectangle(180, 200, 220, 270, fill="saddlebrown")
-полотно.create_rectangle(120, 170, 160, 210, fill="lightblue")
-полотно.create_rectangle(240, 170, 280, 210, fill="lightblue")'''
+house_abs = '''полотно.create_rectangle(200, 250, 500, 450, fill="lightyellow")
+полотно.create_polygon(150, 250, 350, 100, 550, 250, fill="brown")
+полотно.create_rectangle(300, 350, 400, 450, fill="saddlebrown")
+полотно.create_rectangle(230, 280, 290, 340, fill="lightblue")
+полотно.create_rectangle(410, 280, 470, 340, fill="lightblue")'''
 s = d.slide("Хатинка кодом",
             "П’ять рядків — і хатинка готова. Перевіряємо за кресленням: усі числа звідти. "
             "Порядок важливий: стіни спершу, вікна й двері потім — інакше стіни їх закриють.")
 s.h2("Хатинка кодом")
 s.code(128, 214, 1664, 280, house_abs, size=26, framed=False)
-s.window(128, 530, 700, shot(prog(house_abs, title="Хатинка")))
+s.window(128, 530, 700, shot(prog(house_abs, title="Хатинка")), grid=True)
 with s.frame():
     s.card(880, 530, 912, 200, "Порядок має значення", "Спершу стіни, потім вікна й двері — інакше стіни їх закриють.",
            kind="orange", title_size=32, body_size=28)
@@ -162,34 +147,35 @@ s = d.slide("Хатинка у функції",
 s.h2("Хатинка у функції — як штамп")
 s.sub("Усі координати рахуємо від однієї точки " + c("(x, y)") + " — лівого верхнього кута стін.")
 s.code(128, 300, 1100, 470, HOUSE_FN, size=25, framed=False)
-call = HOUSE_FN + '\n\nхатинка(100, 200, "lightyellow")\nхатинка(330, 160, "pink")'
+call = HOUSE_FN + '\n\nхатинка(150, 300, "lightyellow")\nхатинка(550, 250, "pink")'
 with s.frame():
-    o = s.window(1260, 300, 532, shot(prog(call, title="Дві хатинки")))
+    o = s.window(1260, 300, 532, shot(prog(call, title="Дві хатинки")), grid=True)
 with s.frame():
-    s.code(1260, 720, 532, 150, 'хатинка(100, 200, "lightyellow")\nхатинка(330, 160, "pink")', size=22, framed=False)
+    s.code(1260, 680, 532, 150, 'хатинка(150, 300, "lightyellow")\nхатинка(550, 250, "pink")', size=22, framed=False)
 with s.frame():
     s.note(910, "Один рядок — одна хатинка. Змінюємо " + c("x") + " і " + c("y") + " — хатинка переїжджає.")
 
 # 7а — зроби зараз
 s = d.now("Зроби зараз: поставте три хатинки",
           "Функцію хатинка роздаємо готовим файлом urok26.py із заготовкою вікна, щоб ніхто не застряг на наборі. "
-          "Учні пишуть лише виклики. Найчастіше питання — «чому хатинка за краєм?»: x або y завеликі, полотно 600 × 400.",
+          "Учні пишуть лише виклики. Найчастіше питання — «чому хатинка за краєм?»: x або y завеликі, полотно 1000 × 600 "
+          "(хатинка займає 110 × 130 разом із дахом, тож x до 880, y від 50 до 520).",
           minutes=4)
 s.steps(["Відкрийте файл із готовою функцією " + c("хатинка(x, y, колір)") + ".",
          "Під функцією напишіть <b>три виклики</b> — кожна хатинка в іншому місці.",
          "Кожній — свій колір: " + c('"pink"') + ", " + c('"lightblue"') + ", " + c('"wheat"') + ".",
          "Хатинка вилізла за край? Зменшіть x або y."], w=860, size=31)
-calls3 = 'хатинка(40, 220, "pink")\nхатинка(240, 120, "lightblue")\nхатинка(440, 260, "wheat")'
+calls3 = 'хатинка(100, 340, "pink")\nхатинка(450, 340, "lightblue")\nхатинка(800, 340, "wheat")'
 s.code(1060, 216, 732, 170, calls3, size=27, framed=False)
-s.window(1060, 420, 640, shot(prog(HOUSE_FN + "\n\n" + calls3, title="Три хатинки")), title="Має вийти так")
+s.window(1060, 420, 732, shot(prog(HOUSE_FN + "\n\n" + calls3, title="Три хатинки")), title="Має вийти так", grid=True)
 
 # 8 — як рахуються точки
 s = d.slide("Як працює штамп: x + 100",
             "Розбираємо, як абсолютні числа стають відносними. Стіни шириною 100 і висотою 80: правий кут — x + 100, низ — y + 80. "
             "Вершина даху на 50 вище й посередині: x + 50, y − 50. Якщо зрозуміти це, можна намалювати будь-що.")
 s.h2("Як працює штамп: x + 100")
-o = s.window(128, 230, 760, shot(prog(HOUSE_FN + '\n\nхатинка(220, 170, "lightyellow")', title="Хатинка")))
-ref = [(220, 170, "(x, y)", "left", BLUE), (320, 250, "(x+100, y+80)", "right", BLUE), (270, 120, "(x+50, y−50)", "right", ORANGE)]
+o = s.window(128, 230, 760, shot(prog(HOUSE_FN + '\n\nхатинка(400, 300, "lightyellow")', title="Хатинка")), grid=True)
+ref = [(400, 300, "(x, y)", "left", BLUE), (500, 380, "(x+100, y+80)", "right", BLUE), (450, 250, "(x+50, y−50)", "right", ORANGE)]
 for x, y, t, side, col in ref:
     with s.frame():
         s.marker(*at(o, x, y), t, color=col, side=side)
@@ -201,32 +187,32 @@ with s.frame():
            kind="blue", body_size=30)
 
 # 9 — цикл
-row = HOUSE_FN + '\n\nfor i in range(5):\n    хатинка(20 + i * 120, 200, "lightyellow")'
+row = HOUSE_FN + '\n\nfor i in range(6):\n    хатинка(40 + i * 160, 300, "lightyellow")'
 s = d.slide("Цикл будує вулицю",
-            "Тепер магія: цикл ставить п’ять хатинок. Кожна наступна на 120 точок правіше. Змінна i — номер хатинки: 0, 1, 2, 3, 4. "
-            "Питаємо: що змінити, щоб хатинок було шість? Щоб вони стояли щільніше?")
+            "Тепер магія: цикл ставить шість хатинок. Кожна наступна на 160 точок правіше. Змінна i — номер хатинки: 0, 1, 2, 3, 4, 5. "
+            "Питаємо: що змінити, щоб хатинок було сім? Щоб вони стояли щільніше?")
 s.h2("Цикл будує вулицю")
-s.code(128, 214, 1664, 150, 'for i in range(5):\n    хатинка(20 + i * 120, 200, "lightyellow")', size=30, framed=False)
-s.window(128, 400, 800, shot(prog(row, title="Вулиця")))
+s.code(128, 214, 1664, 150, 'for i in range(6):\n    хатинка(40 + i * 160, 300, "lightyellow")', size=30, framed=False)
+s.window(128, 400, 800, shot(prog(row, title="Вулиця")), grid=True)
 with s.frame():
-    s.table(1180, 400, [180, 432], [["i", "x хатинки"]] + [[str(i), f"20 + {i} · 120 = {20 + i * 120}"] for i in range(5)],
-            row_h=72, size=28)
+    s.table(1180, 400, [180, 432], [["i", "x хатинки"]] + [[str(i), f"40 + {i} · 160 = {40 + i * 160}"] for i in range(6)],
+            row_h=66, size=28)
 with s.frame():
-    s.card(1180, 860, 612, 120, None, "Шість хатинок? " + c("range(6)") + " і крок менший.", kind="blue", body_size=28)
+    s.card(1180, 880, 612, 110, None, "Сім хатинок? " + c("range(7)") + " і крок менший.", kind="blue", body_size=28)
 
 # 10 — random кольори
 rnd = 'import random\n\n' + HOUSE_FN + '''
 
 кольори = ["lightyellow", "pink", "lightblue", "wheat", "lavender"]
-for i in range(5):
-    хатинка(20 + i * 120, 200, random.choice(кольори))'''
+for i in range(6):
+    хатинка(40 + i * 160, 300, random.choice(кольори))'''
 s = d.slide("Різні кольори з random",
             "Однакові хатинки — нудно. random.choice бере випадковий колір зі списку, і щоразу вулиця інша. "
             "Три запуски — три різні вулиці. Можна так само випадково міняти висоту чи відступ.")
 s.h2("Різні кольори з random")
 s.code(128, 214, 1664, 190, '''кольори = ["lightyellow", "pink", "lightblue", "wheat", "lavender"]
-for i in range(5):
-    хатинка(20 + i * 120, 200, random.choice(кольори))''', size=26, framed=False)
+for i in range(6):
+    хатинка(40 + i * 160, 300, random.choice(кольори))''', size=26, framed=False)
 for k, seed in enumerate([1, 7, 23]):
     code = rnd.replace("кольори = [", f"random.seed({seed})\nкольори = [")
     with s.frame():
@@ -242,9 +228,9 @@ s.h2("Фон і друга функція")
 s.code(128, 214, 860, 360, TREE_FN, size=24, framed=False)
 with s.frame():
     s.code(128, 600, 860, 300, '''# фон — першим!
-полотно.create_rectangle(0, 0, 600, 280, fill="skyblue")
-полотно.create_rectangle(0, 280, 600, 400, fill="lightgreen")
-полотно.create_oval(480, 30, 560, 110, fill="gold")''', size=24, framed=False)
+полотно.create_rectangle(0, 0, 1000, 420, fill="skyblue")
+полотно.create_rectangle(0, 420, 1000, 600, fill="lightgreen")
+полотно.create_oval(850, 40, 950, 140, fill="gold")''', size=24, framed=False)
 with s.frame():
     s.window(1020, 214, 772, shot(prog(STREET, title="Вулиця Сонячна")))
 with s.frame():
@@ -252,12 +238,12 @@ with s.frame():
 
 # 12 — що зміниться
 s = d.slide("Що зміниться?",
-            "Змінюємо одне число — клас передбачає результат. Перше: крок 120 → 60, хатинки налізуть одна на одну. "
-            "Друге: y = 50 — хатинки злетять угору, дахи вийдуть за край. Третє: range(3) — лише три.")
+            "Змінюємо одне число — клас передбачає результат. Перше: крок 160 → 80, хатинки налізуть одна на одну. "
+            "Друге: y = 30 — хатинки злетять угору, дахи вийдуть за край. Третє: range(3) — лише три.")
 s.h2("Що зміниться?")
-variants = [("хатинка(20 + i * 60, 200, …)", HOUSE_FN + '\n\nfor i in range(5):\n    хатинка(20 + i * 60, 200, "lightyellow")'),
-            ("хатинка(20 + i * 120, 30, …)", HOUSE_FN + '\n\nfor i in range(5):\n    хатинка(20 + i * 120, 30, "lightyellow")'),
-            ("for i in range(3):", HOUSE_FN + '\n\nfor i in range(3):\n    хатинка(20 + i * 120, 200, "lightyellow")')]
+variants = [("хатинка(40 + i * 80, 300, …)", HOUSE_FN + '\n\nfor i in range(6):\n    хатинка(40 + i * 80, 300, "lightyellow")'),
+            ("хатинка(40 + i * 160, 30, …)", HOUSE_FN + '\n\nfor i in range(6):\n    хатинка(40 + i * 160, 30, "lightyellow")'),
+            ("for i in range(3):", HOUSE_FN + '\n\nfor i in range(3):\n    хатинка(40 + i * 160, 300, "lightyellow")')]
 for k, (lbl, code) in enumerate(variants):
     x = 128 + k * 568
     s.box(x, 230, 528, 110, "screen")
@@ -265,7 +251,7 @@ for k, (lbl, code) in enumerate(variants):
 for k, (lbl, code) in enumerate(variants):
     x = 128 + k * 568
     with s.frame("pop"):
-        s.window(x, 380, 524, shot(prog(code)), title="Результат")
+        s.window(x, 380, 524, shot(prog(code)), title="Результат", grid=True)
 
 # 13 — типові помилки
 s = d.slide("Типові помилки",
@@ -276,14 +262,14 @@ bad1 = '''def хатинка(x, y, колір):
     полотно.create_rectangle(100, 150, 200, 230, fill=колір)
 
 for i in range(5):
-    хатинка(20 + i * 120, 200, "pink")'''
+    хатинка(40 + i * 160, 300, "pink")'''
 with s.frame():
     s.mistake(720, 130, 1072, '''def хатинка(x, y, колір):
     полотно.create_rectangle(100, 150, 200, 230, …)''',
               "Числа замість " + c("x + …") + ": усі п’ять хатинок в одному місці", code_h=110, size=24)
 with s.frame():
     s.mistake(720, 390, 1072, '''хатинка(100, 200, "pink")
-полотно.create_rectangle(0, 0, 600, 400, fill="skyblue")''',
+полотно.create_rectangle(0, 0, 1000, 600, fill="skyblue")''',
               "Фон після хатинки — і він її закрив", code_h=110, size=24)
 with s.frame():
     s.mistake(720, 650, 1072, '''полотно.create_polygon(80, 150, 200, 50, 320)''',
@@ -312,27 +298,27 @@ s.steps(["Візьміть готову функцію " + c("хатинка(x, 
          "Поставте 3–4 хатинки так, щоб усі були повністю на полотні.",
          "Кожна — своїм кольором.",
          "Додайте траву " + c("create_rectangle") + " і сонце " + c("create_oval") + ". Траву — <b>першою</b>!"], w=860, size=31)
-lvl1 = '''полотно.create_rectangle(0, 300, 600, 400, fill="lightgreen", outline="")
-полотно.create_oval(490, 20, 570, 100, fill="gold", outline="")
+lvl1 = '''полотно.create_rectangle(0, 420, 1000, 600, fill="lightgreen", outline="")
+полотно.create_oval(860, 30, 960, 130, fill="gold", outline="")
 ''' + calls3
-s.window(1060, 216, 700, shot(prog(HOUSE_FN + "\n\n" + lvl1, title="Мої хатинки")), title="Зразок")
+s.window(1060, 216, 732, shot(prog(HOUSE_FN + "\n\n" + lvl1, title="Мої хатинки")), title="Зразок", grid=True)
 
 # 15а — рівень 2
 gaps = '''кольори = ["pink", "lightblue", "wheat"]
 
 for i in range(___):
-    хатинка(20 + i * ___, 200, random.choice(кольори))
+    хатинка(40 + i * ___, 300, random.choice(кольори))
 
-for i in range(5):
-    дерево(___, 380)'''
+for i in range(6):
+    дерево(___, 560)'''
 s = d.task("Рівень 2. Допиши вулицю",
-           "Пропуски: range(5), крок 120 (або менший, якщо хатинок більше), дерева — наприклад 15 + i * 145. "
+           "Пропуски: range(6), крок 160 (або менший, якщо хатинок більше), дерева — наприклад 95 + i * 160. "
            "Функцію дерево беремо зі слайда «Фон і друга функція».")
 s.code(128, 216, 900, 330, gaps, size=27, framed=False)
 s.steps(["Заповніть пропуски " + c("___") + ": скільки хатинок і на скільки зсувати кожну.",
          "Додайте функцію " + c("дерево(x, y)") + " зі слайда і заповніть, де стоятимуть дерева.",
          "Не забудьте " + c("import random") + " на початку."], x=128, y=580, w=900, size=30)
-s.window(1080, 216, 700, shot(prog(STREET, title="Вулиця")), title="Має вийти так")
+s.window(1080, 216, 712, shot(prog(STREET, title="Вулиця")), title="Має вийти так", grid=True)
 
 # 15б — рівень 3
 s = d.task("Рівень 3. Проєкт «Вулиця»",
@@ -351,10 +337,12 @@ s.table(1060, 216, [520, 208], [["Що оцінюємо", "балів"], ["ха�
 s = d.task("Без комп’ютера: креслення на клітинках",
            "Відповіді: вершина даху — (x + 50, y − 50). Для хатинки з x = 200, y = 100: стіни (200, 100)–(300, 180), "
            "дах (190, 100), (250, 50), (310, 100).", where="У зошиті")
-s.steps(["Накресліть полотно на клітинках, клітинка — 20 точок.",
+s.steps(["Накресліть полотно 20 × 12 клітинок, клітинка — 50 точок.",
          "Намалюйте хатинку з якорем у точці (200, 100) і підпишіть координати всіх кутів.",
          "Запишіть виклик функції, що ставить таку хатинку.",
-         "Запишіть цикл, який ставить 4 хатинки з кроком 130."], w=1000, size=30)
+         "Запишіть цикл, який ставить 4 хатинки з кроком 200."], w=900, size=30)
+s.plane(1180, 300, 610)
+s.text(1080, 790, 712, 50, "Зразок рамки: 20 × 12 клітинок, клітинка = 50", size=26, weight=600, align="center", color=INK2)
 
 out = os.path.join(REPO, "Презентації уроків", "Python", "Урок 26. Хатинка й вулиця.html")
 print(d.save(out), len(d.slides))

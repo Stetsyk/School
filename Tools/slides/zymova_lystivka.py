@@ -1,14 +1,14 @@
 """Python-проєкт «Зимова листівка»: функції-фігури на полотні tkinter, цикли, random, анімація снігу."""
 import os
-from deck import Deck, c, esc, shot, onion, REPO, INK, INK2, ORANGE, BLUE, DARK_BG, PAPER
+from deck import Deck, c, esc, shot, onion, REPO, INK, INK2, ORANGE, BLUE, DARK_BG, PAPER, P
 from grafika import prog
 
 d = Deck("Зимова листівка", kind="python", topic="Функції на полотні")
 
-BG = '''полотно.create_rectangle(0, 0, 600, 400, fill="midnightblue", outline="")
-полотно.create_oval(470, 30, 540, 100, fill="lightyellow", outline="")
-полотно.create_oval(-100, 280, 350, 520, fill="white", outline="")
-полотно.create_oval(250, 300, 750, 520, fill="white", outline="")'''
+BG = '''полотно.create_rectangle(0, 0, 1000, 600, fill="midnightblue", outline="")
+полотно.create_oval(820, 40, 920, 140, fill="lightyellow", outline="")
+полотно.create_oval(-150, 420, 550, 780, fill="white", outline="")
+полотно.create_oval(400, 450, 1200, 780, fill="white", outline="")'''
 
 TREE = '''def ялинка(x, y, розмір):
     # стовбур
@@ -43,19 +43,19 @@ FLAKE = '''def сніжинка(x, y, r):
 
 FUNCS = "\n\n".join([TREE, SNOWMAN, FLAKE])
 
-MAIN = '''for i in range(5):
-    ялинка(40 + i * 40, 330, random.randint(80, 140))
+MAIN = '''for i in range(6):
+    ялинка(60 + i * 60, 500, random.randint(120, 210))
 for i in range(3):
-    ялинка(450 + i * 50, 340, random.randint(70, 120))
+    ялинка(720 + i * 80, 510, random.randint(100, 180))
 
-сніговик(330, 360)
+сніговик(530, 540)
 
-for i in range(25):
-    сніжинка(random.randint(10, 590), random.randint(10, 260),
-             random.randint(4, 9))
+for i in range(35):
+    сніжинка(random.randint(10, 990), random.randint(10, 380),
+             random.randint(5, 12))
 
-полотно.create_text(300, 385, text="З Новим роком!",
-                    font=("Arial", 20, "bold"), fill="darkred")'''
+полотно.create_text(500, 575, text="З Новим роком!",
+                    font=("Arial", 28, "bold"), fill="darkred")'''
 
 CARD = "import random\n\n" + FUNCS + "\n\n" + BG + "\n\n" + MAIN
 
@@ -100,7 +100,7 @@ s = d.slide("Фон: ніч, місяць, замети",
             "видно лише їхню верхню частину, і виходить горбик. outline=\"\" прибирає чорний контур.")
 s.h2("Фон: ніч, місяць, замети")
 s.code(128, 214, 1664, 230, BG, size=26, framed=False)
-s.window(128, 480, 720, shot(prog(BG, title="Фон")))
+s.window(128, 480, 720, shot(prog(BG, title="Фон")), grid=True)
 with s.frame():
     s.card(900, 480, 892, 210, "Овал за краєм полотна", "Видно лише верх великого овалу — і виходить замет.",
            kind="blue", title_size=32, body_size=28)
@@ -109,27 +109,26 @@ with s.frame():
            body_size=28)
 
 # 5 — ялинка за кресленням
-tree_fixed = '''полотно.create_rectangle(290, 360, 310, 400, fill="sienna")
-полотно.create_polygon(200, 360, 300, 250, 400, 360, fill="forestgreen")
-полотно.create_polygon(220, 300, 300, 200, 380, 300, fill="green")'''
+tree_fixed = '''полотно.create_rectangle(470, 490, 530, 550, fill="sienna")
+полотно.create_polygon(350, 490, 500, 325, 650, 490, fill="forestgreen")
+полотно.create_polygon(380, 400, 500, 250, 620, 400, fill="green")'''
 
 
 def at(o, cx, cy):
-    ox, oy, k = o
-    return ox + (cx + 1) * k, oy + (cy + 1) * k
+    return P(o, cx, cy)
 
 
 s = d.slide("Ялинка за кресленням",
-            "Спершу ялинка з конкретними числами: розмір 200, низ стовбура в точці (300, 400). Стовбур — прямокутник, "
+            "Спершу ялинка з конкретними числами: розмір 300, низ стовбура в точці (500, 550). Рахуємо по сітці: клітинка — 50. Стовбур — прямокутник, "
             "крона — два трикутники один над одним. Підписуємо координати вершин — наступним кроком замінимо їх формулами.")
 s.h2("Ялинка за кресленням")
 s.code(128, 214, 1664, 170, tree_fixed, size=26, framed=False)
-o = s.window(128, 420, 720, shot(prog(tree_fixed, title="Ялинка 200")))
-for x, y, side in [(300, 400, "right"), (300, 200, "right"), (200, 360, "left"), (400, 360, "right")]:
+o = s.window(128, 420, 720, shot(prog(tree_fixed, title="Ялинка 300")), grid=True)
+for x, y, side in [(500, 550, "right"), (500, 250, "right"), (350, 490, "left"), (650, 490, "right")]:
     with s.frame():
         s.marker(*at(o, x, y), f"({x}, {y})", side=side)
 with s.frame():
-    s.card(900, 420, 892, 250, "Якір — низ стовбура", ["x = 300, y = 400", "розмір = 200 — висота всієї ялинки"],
+    s.card(900, 420, 892, 250, "Якір — низ стовбура", ["x = 500, y = 550", "розмір = 300 — висота всієї ялинки"],
            kind="blue", title_size=32, body_size=29, valign="flex-start")
 with s.frame():
     s.card(900, 700, 892, 210, None, "Але так ялинка завжди одна й та сама. А нам треба ліс із різних!", kind="orange",
@@ -142,11 +141,11 @@ s = d.slide("Ялинка будь-якого розміру",
 s.h2("Ялинка будь-якого розміру")
 s.sub("Усі відстані — <b>частки від розміру</b>.")
 s.code(128, 290, 1080, 620, TREE, size=25, framed=False)
-three = TREE + "\n\nялинка(110, 380, 90)\nялинка(280, 380, 180)\nялинка(480, 380, 300)"
+three = TREE + "\n\nялинка(180, 560, 150)\nялинка(450, 560, 270)\nялинка(780, 560, 420)"
 with s.frame():
-    s.window(1240, 290, 552, shot(prog(three, title="Три розміри")))
+    s.window(1240, 290, 552, shot(prog(three, title="Три розміри")), grid=True)
 with s.frame():
-    s.code(1240, 720, 552, 150, "ялинка(110, 380, 90)\nялинка(280, 380, 180)\nялинка(480, 380, 300)", size=24,
+    s.code(1240, 720, 552, 150, "ялинка(180, 560, 150)\nялинка(450, 560, 270)\nялинка(780, 560, 420)", size=24,
            framed=False)
 with s.frame():
     s.card(128, 940, 1664, 90, None, "Верхівка — на висоті " + c("розмір") + ", крона завширшки " + c("розмір") +
@@ -155,13 +154,13 @@ with s.frame():
 # 7 — ліс циклом
 forest = "import random\n\n" + TREE + '''
 
-for i in range(8):
-    ялинка(40 + i * 75, 380, random.randint(80, 200))'''
+for i in range(10):
+    ялинка(50 + i * 100, 560, random.randint(120, 300))'''
 s = d.slide("Ліс циклом і random",
-            "Цикл ставить вісім ялинок поруч, а random щоразу дає іншу висоту від 80 до 200. Три запуски — три різні ліси. "
+            "Цикл ставить десять ялинок поруч, а random щоразу дає іншу висоту від 120 до 300. Три запуски — три різні ліси. "
             "Справжній ліс теж не буває однаковим.")
 s.h2("Ліс циклом і random")
-s.code(128, 214, 1664, 130, "for i in range(8):\n    ялинка(40 + i * 75, 380, random.randint(80, 200))", size=30,
+s.code(128, 214, 1664, 130, "for i in range(10):\n    ялинка(50 + i * 100, 560, random.randint(120, 300))", size=30,
        framed=False)
 for k, seed in enumerate((1, 5, 9)):
     code = forest.replace("import random\n", f"import random\nrandom.seed({seed})\n", 1)
@@ -176,7 +175,7 @@ s = d.slide("Сніговик із морквинкою",
             "Усі координати — від якоря (x, y), низу сніговика. На темному тлі білий сніговик видно краще.")
 s.h2("Сніговик із морквинкою")
 s.code(128, 214, 1080, 420, SNOWMAN, size=22, framed=False)
-s.window(1240, 214, 552, shot(prog(SNOWMAN + "\n\nсніговик(300, 380)", title="Сніговик", bg="skyblue")))
+s.window(1240, 214, 552, shot(prog(SNOWMAN + "\n\nсніговик(500, 520)", title="Сніговик", bg="skyblue")), grid=True)
 with s.frame():
     s.card(128, 670, 1080, 200, "Якір — низ сніговика",
            "Нижнє коло — від y − 90 до y, середнє — від y − 150, голова — від y − 192. Кожне трохи заходить на попереднє.",
@@ -186,7 +185,7 @@ with s.frame():
            title_size=30, body_size=26)
 
 # 9 — сніжинка
-flakes = FLAKE + "\n\nполотно.config(bg=\"midnightblue\")\nсніжинка(150, 200, 80)\nсніжинка(380, 150, 40)\nсніжинка(500, 300, 20)"
+flakes = FLAKE + "\n\nполотно.config(bg=\"midnightblue\")\nсніжинка(250, 300, 120)\nсніжинка(600, 220, 60)\nсніжинка(820, 420, 30)"
 s = d.slide("Сніжинка з чотирьох ліній",
             "Чотири лінії через центр: горизонтальна, вертикальна й дві діагональні. Для діагоналей беремо д = 0,7 радіуса — тоді всі промені "
             "однакової довжини (це синус 45°, але дітям досить «так виходить рівно»). Змінна д лише скорочує запис.")
@@ -201,20 +200,20 @@ with s.frame():
 snow = "import random\n\n" + FLAKE + '''
 
 полотно.config(bg="midnightblue")
-for i in range(40):
-    сніжинка(random.randint(10, 590), random.randint(10, 390),
+for i in range(60):
+    сніжинка(random.randint(10, 990), random.randint(10, 590),
              random.randint(4, 12))'''
 s = d.slide("Сніг циклом",
-            "Сорок сніжинок у випадкових місцях і різного розміру. Межі random беремо з полотна: x від 10 до 590, y від 10 до 390 — "
+            "Шістдесят сніжинок у випадкових місцях і різного розміру. Межі random беремо з полотна: x від 10 до 990, y від 10 до 590 — "
             "щоб сніжинки не обрізало краєм.")
 s.h2("Сніг циклом")
-s.code(128, 214, 1080, 260, '''for i in range(40):
-    сніжинка(random.randint(10, 590), random.randint(10, 390),
+s.code(128, 214, 1080, 260, '''for i in range(60):
+    сніжинка(random.randint(10, 990), random.randint(10, 590),
              random.randint(4, 12))''', size=26, framed=False)
 s.window(1240, 214, 552, shot(prog(snow.replace("import random\n", "import random\nrandom.seed(4)\n", 1), title="Сніг")))
 with s.frame():
-    s.table(128, 510, [360, 720], [["що", "random"], ["x", "randint(10, 590) — по ширині полотна"],
-                                   ["y", "randint(10, 390) — по висоті"], ["r", "randint(4, 12) — маленькі й великі"]],
+    s.table(128, 510, [360, 720], [["що", "random"], ["x", "randint(10, 990) — по ширині полотна"],
+                                   ["y", "randint(10, 590) — по висоті"], ["r", "randint(4, 12) — маленькі й великі"]],
             row_h=72, size=27)
 
 # 11 — збираємо
@@ -237,17 +236,17 @@ import time
 
 полотно.config(bg="midnightblue")
 сніжинки = []
-for i in range(50):
-    x = random.randint(0, 600)
-    y = random.randint(-400, 400)
+for i in range(80):
+    x = random.randint(0, 1000)
+    y = random.randint(-600, 600)
     сніжинки.append(полотно.create_oval(x, y, x + 6, y + 6,
                                         fill="white", outline=""))
 
 while True:
     for с in сніжинки:
         полотно.move(с, random.randint(-1, 1), 2)
-        if полотно.coords(с)[1] > 400:
-            полотно.move(с, 0, -410)
+        if полотно.coords(с)[1] > 600:
+            полотно.move(с, 0, -610)
     полотно.update()
     time.sleep(0.03)'''
 fall_seeded = FALL.replace("import time\n", "import time\nrandom.seed(3)\n", 1)
@@ -273,7 +272,7 @@ with s.frame():
               "Числа замість " + c("розмір / …") + ": усі ялинки однакові", code_h=80, size=24)
 with s.frame():
     s.mistake(720, 330, 1072, '''ялинка(100, 350, 120)
-полотно.create_rectangle(0, 0, 600, 400, fill="midnightblue")''', "Фон після ялинки — і він її закрив", code_h=110, size=24)
+полотно.create_rectangle(0, 0, 1000, 600, fill="midnightblue")''', "Фон після ялинки — і він її закрив", code_h=110, size=24)
 with s.frame():
     s.mistake(720, 570, 1072, '''розмір = random.randint(80, 140)
 # NameError: name 'random' is not defined''', "Забули " + c("import random"), code_h=110, size=24)
@@ -299,12 +298,14 @@ s.window(1060, 216, 732, shot(card(7)), title="Зразок")
 
 # 16 — без комп'ютера
 s = d.task("Без комп’ютера: ялинка на клітинках",
-           "Відповіді для ялинка(300, 400, 100): стовбур (290, 380)–(310, 400); нижній трикутник (250, 380), (300, 325), (350, 380); "
-           "верхній (260, 350), (300, 300), (340, 350).", where="У зошиті")
-s.steps(["Накресліть полотно на клітинках, клітинка — 20 точок.",
-         "Обчисліть і підпишіть усі вершини для " + c("ялинка(300, 400, 100)") + ".",
+           "Відповіді для ялинка(500, 500, 200): стовбур (480, 460)–(520, 500); нижній трикутник (400, 460), (500, 350), (600, 460); "
+           "верхній (420, 400), (500, 300), (580, 400).", where="У зошиті")
+s.steps(["Накресліть полотно 20 × 12 клітинок, клітинка — 50 точок.",
+         "Обчисліть і підпишіть усі вершини для " + c("ялинка(500, 500, 200)") + ".",
          "Намалюйте її за цими точками.",
-         "Запишіть функцію для зірочки на верхівці ялинки — теж через " + c("розмір") + "."], w=1100, size=30)
+         "Запишіть функцію для зірочки на верхівці ялинки — теж через " + c("розмір") + "."], w=900, size=30)
+s.plane(1180, 300, 610)
+s.text(1080, 790, 712, 50, "Зразок рамки: 20 × 12 клітинок, клітинка = 50", size=26, weight=600, align="center", color=INK2)
 
 out = os.path.join(REPO, "Презентації уроків", "Python", "Проєкти", "Зимова листівка.html")
 print(d.save(out), len(d.slides))
