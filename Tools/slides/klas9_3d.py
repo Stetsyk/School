@@ -101,7 +101,7 @@ add("cube", "Труба", loc=(0.8, 0.3, 2.9), scale=(0.15, 0.15, 0.4), color="#
 '''
 
 ROCKET = '''
-clean(cam=(9, -9, 6.5), target=(0, 0, 2))
+clean(cam=(10.5, -10.5, 6.4), target=(0, 0, 2.35))
 add("cylinder", "Корпус", loc=(0, 0, 2), scale=(0.6, 0.6, 1.5), color="#E6E8EC", vertices=48)
 add("cone", "Ніс", loc=(0, 0, 4.1), scale=(0.6, 0.6, 0.6), color="#D9342B", vertices=48)
 add("cylinder", "Ілюмінатор", loc=(0, -0.55, 2.6), rot=(90, 0, 0), scale=(0.25, 0.25, 0.08), color="#8EC5F0", vertices=48)
