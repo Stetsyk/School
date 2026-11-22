@@ -268,7 +268,7 @@ def zrazky_slide(d, lesson):
                 "у «Властивостях», анімацію на таймлайні. PNG — рендер результату, .mp4 — відео анімації.\n"
                 "Показуємо зразок перед самостійною роботою або для самоперевірки.")
     s.h2("Готові зразки")
-    s.sub("Папка <b>Додатки / " + LESSON[lesson] + "</b>: .blend, рендер .png" +
+    s.sub("Папка <b>Додатки</b> поруч із презентацією: .blend, рендер .png" +
           (", відео .mp4" if glob.glob(os.path.join(folder, "*.mp4")) else "") +
           (", для друку .stl" if glob.glob(os.path.join(folder, "*.stl")) else ""))
     n = min(len(pngs), 6)
