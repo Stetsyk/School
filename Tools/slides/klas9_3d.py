@@ -140,13 +140,13 @@ mat(c, hexc("#D9342B"), "Пластик", rough=0.35)
 ''' + SMOOTH
 
 PAWN = '''
-clean(cam=(5, -5, 3.6), target=(0, 0, 1.0))
-add("cylinder", "Основа", loc=(0, 0, 0.12), scale=(0.75, 0.75, 0.12), color="#E6E8EC", vertices=64)
-add("torus", "Кільце", loc=(0, 0, 0.28), scale=(0.62, 0.62, 0.62), color="#E6E8EC", major_segments=64, minor_segments=24,
+clean(cam=(6.2, -6.2, 4.0), target=(0, 0, 1.08))
+add("cylinder", "Основа", loc=(0, 0, 0.12), scale=(0.75, 0.75, 0.12), color="#34373D", vertices=64)
+add("torus", "Кільце", loc=(0, 0, 0.28), scale=(0.62, 0.62, 0.62), color="#34373D", major_segments=64, minor_segments=24,
     major_radius=1, minor_radius=0.2)
-add("cone", "Тулуб", loc=(0, 0, 0.95), scale=(0.5, 0.5, 0.75), color="#E6E8EC", vertices=64)
-add("cylinder", "Комірець", loc=(0, 0, 1.55), scale=(0.38, 0.38, 0.05), color="#E6E8EC", vertices=64)
-add("uv_sphere", "Голова", loc=(0, 0, 1.92), scale=(0.36, 0.36, 0.36), color="#E6E8EC", segments=64, ring_count=32)
+add("cone", "Тулуб", loc=(0, 0, 0.95), scale=(0.5, 0.5, 0.75), color="#34373D", vertices=64)
+add("cylinder", "Комірець", loc=(0, 0, 1.55), scale=(0.38, 0.38, 0.05), color="#34373D", vertices=64)
+add("uv_sphere", "Голова", loc=(0, 0, 1.92), scale=(0.36, 0.36, 0.36), color="#34373D", segments=64, ring_count=32)
 ''' + SMOOTH
 
 LAMP = '''
