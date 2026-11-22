@@ -6,6 +6,8 @@ from deck import Deck, c, esc, REPO, INK, INK2, ORANGE, BLUE, DARK_BG, PAPER, da
 import grafika6 as g
 from grafika6 import kwin, num, ring
 import klas6_i13_shots as V
+import gdocs  # noqa: F401
+from kritakroky import how
 
 d = Deck("Векторні зображення в Krita", kind="info", topic="Векторні зображення в Krita")
 
@@ -131,6 +133,14 @@ for k, (q, a) in enumerate(qs):
     s.card(128, y, 820, 104, None, q, kind="light", body_size=30)
     with s.frame("pop"):
         s.chip(980, y, 812, 104, a, kind="blue", size=28, mono=False, weight=700)
+
+# 7а — будиночок покроково
+how(d, "Будиночок: куди натискати",
+    "Справжній скрін Krita з номерами кроків (такі самі номери на слайді «Зроби зараз»). 2 — у панелі «Шари» з’явився "
+    "«Векторний шар 1» (стрілочка біля + → Додати векторний шар). 3 — «Прямокутник». 4 — «Багатокутник»: клік по трьох "
+    "вершинах, подвійний клік — кінець. 6 — «Вибір фігур» (чорна стрілка вгорі): клацнули дах — виділився лише він.",
+    ["Векторний шар у «Шарах».", "<b>Прямокутник</b> — стіни.", "<b>Багатокутник</b> — дах.",
+     "Ще раз <b>Прямокутник</b> — вузька труба.", "<b>Вибір фігур</b> — клацніть дах."], V.V_HOUSE_STEPS, w_steps=600, size=31, start=2)
 
 # 8 — зроби зараз: будиночок
 s = d.now("Зроби зараз: будиночок із трьох фігур",

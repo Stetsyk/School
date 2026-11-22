@@ -50,3 +50,21 @@ K_EYE = kshot([{"open": E4}, {"zoom": 1.0}, {"select_rect": [150, 150, 62, 90]},
 
 # меню «Файл»
 K_FILE = kshot([{"open": E4}, {"zoom": 1.0}], xdo=["mousemove 27 10", "click 1", "sleep 1"])
+
+# ---- покрокові скріни з номерами (kritakroky, чіткі scale=2) ----
+from kritakroky import kk, box, TOOL, COLOR
+
+DLG = (360, 66, 1005, 632)
+KR_NEW = kk(NEW, TYPE500, parts=[DLG],
+            marks=[(700, 172, 820, 193, "right"), (700, 204, 820, 225, "right"), (618, 78, 676, 98, "right"),
+                   (805, 592, 893, 617, "left")], nums=(3, 3, 4, 5))
+KR_CIRCLE = kk([{"open": E0}, {"zoom": 2.0}, {"fg": "#F7CE46"}, {"tool": "KisToolSelectElliptical"}],
+               SEL + ["key f", "sleep 0.5", f"mousemove {cx} {cy}", "click 1", "sleep 1.5", AWAY], layout="row",
+               parts=[(0, 75, 62, 470), (330, 150, 830, 650), (1104, 90, 1366, 215)],
+               marks=[box(TOOL["Еліптичне виділення"], "right"), (x0 + 30, y0 + 30, x1 - 30, y1 - 30, "top"), box(COLOR, "left"),
+                      box(TOOL["Заливка"], "right"), (cx - 14, cy - 14, cx + 14, cy + 14, "bottom")])
+KR_BRUSH = kk([{"open": E1}, {"zoom": 2.0}, {"tool": "KisToolBrush"}, {"fg": "#2F3033"}, {"size": 16}],
+              BRUSH + [AWAY], layout="row",
+              parts=[(0, 75, 62, 340), (940, 24, 1180, 56), (330, 150, 830, 650)],
+              marks=[box(TOOL["Пензель"], "right"), (960, 28, 1170, 52, "bottom"), box(TOOL["Піпетка"], "right")],
+              nums=(1, 2, 3))

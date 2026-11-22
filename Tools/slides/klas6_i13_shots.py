@@ -27,3 +27,13 @@ V_FILL = vec(g.ROCKET_SVG, "Ракета", ["korpus"], ["mousemove 1305 71", "cl
 V_CTX = vec(g.ROCKET_SVG, "Ракета", ["korpus"], ["mousemove 578 470", "click 3", "sleep 1.2"])
 V_ORDER_BAD = vec(g.landscape_svg(["sonce", "nebo", "hory", "khmara", "trava"]), "Краєвид")
 V_ORDER_GOOD = vec(g.landscape_svg(["nebo", "sonce", "khmara", "hory", "trava"]), "Краєвид")
+
+# ---- покроковий скрін будиночка з номерами (kritakroky) ----
+from kritakroky import kk, box, row_box, TOOL
+
+V_HOUSE_STEPS = kk([{"new": [500, 500, "Будинок"]}, {"hide_docker": "PresetDocker"}, {"svg": g.HOUSE_SVG},
+                    {"zoom": 2.0}, {"tool": SEL}, {"select_shapes": ["dakh"]}], [AWAY], layout="row",
+                   parts=[(0, 75, 62, 200), (380, 220, 800, 600), (1100, 425, 1366, 480)],
+                   marks=[row_box(0, "row", "bottom"), box(TOOL["Прямокутник"], "right"),
+                          box(TOOL["Багатокутник"], "right"), box(TOOL["Вибір фігур"], "right")],
+                   nums=(2, 3, 4, 6))

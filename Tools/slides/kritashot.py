@@ -29,6 +29,13 @@ Krita запускається під віртуальним дисплеєм (X
     {"brush": "b) Basic-5 Size Opacity"} — набір пензля
     {"paint": [[x, y], …], "size": 30} — провести лінію пензлем (через QPainter на шарі)
     {"layer": "Назва"}                 — новий растровий шар із назвою
+    {"png_layer": ["назва", path]}     — растровий шар із готової картинки (розмір як у документа)
+    {"hide_docker": "PresetDocker"}   — сховати панель (тоді «Шари» стають на всю висоту)
+    {"drop_bg": true}                  — прибрати стандартний шар «Тло»
+    {"opacity": ["назва", 50]}         — непрозорість шару, %
+    {"hide": "назва"}                  — вимкнути око шару
+    {"active": "назва"}                — зробити шар активним
+    {"raise_to_top": "назва"}          — перенести шар на верх стопки
     {"wait": 500}                      — пауза, мс
 xdo — команди xdotool, які виконуються ззовні вже після сценарію (наприклад, "mousemove 300 200",
 "click 1", "key ctrl+z"); можна "sleep 0.5".
@@ -201,6 +208,53 @@ class Shot(Extension):
             n.setPixelData(bytes(ptr), 0, 0, ww, hh)
             self.doc.refreshProjection()
             return 500
+        if "png_layer" in st:              # новий растровий шар із картинки (PNG того ж розміру, що й документ)
+            name, path = st["png_layer"]
+            layer = self.doc.createNode(name, "paintlayer")
+            self.doc.rootNode().addChildNode(layer, None)
+            img = QImage(path).convertToFormat(QImage.Format_ARGB32)
+            ptr = img.constBits()
+            ptr.setsize(img.byteCount())
+            layer.setPixelData(bytes(ptr), 0, 0, img.width(), img.height())
+            self.doc.setActiveNode(layer)
+            self.doc.refreshProjection()
+            return 500
+        if "hide_docker" in st:            # сховати панель (напр. PresetDocker — «Набори пензлів»)
+            names = st["hide_docker"] if isinstance(st["hide_docker"], list) else [st["hide_docker"]]
+            for dw in k.dockers():
+                if dw.objectName() in names:
+                    dw.hide()
+            log("dockers", [dw.objectName() for dw in k.dockers() if dw.isVisible()])
+            return 600
+        if "drop_bg" in st:                # прибрати стандартний шар «Тло»
+            kids = self.doc.rootNode().childNodes()
+            if kids:
+                kids[0].remove()
+            self.doc.refreshProjection()
+            return 400
+        if "opacity" in st:                # [назва шару, 0…100 %]
+            n = self.doc.nodeByName(st["opacity"][0])
+            n.setOpacity(int(round(st["opacity"][1] * 255 / 100)))
+            self.doc.refreshProjection()
+            return 400
+        if "hide" in st:
+            self.doc.nodeByName(st["hide"]).setVisible(False)
+            self.doc.refreshProjection()
+            return 400
+        if "active" in st:
+            self.doc.setActiveNode(self.doc.nodeByName(st["active"]))
+            return 500
+        if "raise_to_top" in st:           # перенести шар на самий верх стопки
+            n = self.doc.nodeByName(st["raise_to_top"])
+            root = self.doc.rootNode()
+            kids = root.childNodes()
+            n2 = n.duplicate()
+            n2.setName(n.name())
+            root.addChildNode(n2, kids[-1])
+            n.remove()
+            self.doc.setActiveNode(n2)
+            self.doc.refreshProjection()
+            return 600
         if "wait" in st:
             return st["wait"]
         log("unknown step", st)
@@ -214,7 +268,7 @@ Krita.instance().addExtension(Shot(Krita.instance()))
 '''
 
 
-def _env(home, scen, flag):
+def _env(home, scen, flag, scale=1):
     cfg = os.path.join(home, ".config")
     data = os.path.join(home, ".local", "share")
     plug = os.path.join(data, "krita", "pykrita")
@@ -229,15 +283,27 @@ def _env(home, scen, flag):
     env.update({"HOME": home, "XDG_CONFIG_HOME": cfg, "XDG_DATA_HOME": data, "LANG": "uk_UA.UTF-8",
                 "LANGUAGE": "uk", "LC_ALL": "uk_UA.UTF-8", "QT_QPA_PLATFORM": "xcb",
                 "KSHOT_SCENARIO": scen, "KSHOT_FLAG": flag, "KSHOT_SCREEN": f"{SCREEN[0]}x{SCREEN[1]}"})
+    if scale != 1:  # чіткі скріни: інтерфейс удвічі більшими пікселями, а координати лишаються ті самі
+        env.update({"QT_SCALE_FACTOR": str(scale), "QT_AUTO_SCREEN_SCALE_FACTOR": "0"})
     return env
 
 
-def kshot(scenario, xdo=None, crop=None, screen=None):
-    """Повертає шлях до PNG зі скриншотом усього вікна Krita. crop=(x, y, w, h) — вирізати частину."""
+def _scale_cmd(cmd, k):
+    """xdotool працює у фізичних пікселях: при scale=2 координати mousemove множимо."""
+    p = cmd.split()
+    if k != 1 and p and p[0] == "mousemove":
+        p = [p[0]] + [str(int(round(float(v) * k))) if v.lstrip("-").replace(".", "").isdigit() else v for v in p[1:]]
+    return p
+
+
+def kshot(scenario, xdo=None, crop=None, screen=None, scale=1):
+    """Повертає шлях до PNG зі скриншотом усього вікна Krita. crop=(x, y, w, h) — вирізати частину.
+    scale=2 — чіткий скрін (Retina): екран 1366 × 768 точок знімається як 2732 × 1536 пікселів; координати в
+    сценарії, xdo і crop — у точках, як і при scale=1."""
     global SCREEN
     SCREEN = tuple(screen or SCREEN)
     os.makedirs(CACHE, exist_ok=True)
-    key = hashlib.md5(json.dumps([scenario, xdo, crop, SCREEN, PLUGIN_INIT], ensure_ascii=False).encode()
+    key = hashlib.md5(json.dumps([scenario, xdo, crop, SCREEN, PLUGIN_INIT, scale], ensure_ascii=False).encode()
                       + b"".join(open(st["open"], "rb").read() for st in scenario if "open" in st)).hexdigest()[:16]
     png = os.path.join(CACHE, "krita-" + key + ".png")
     if os.path.exists(png):
@@ -246,9 +312,9 @@ def kshot(scenario, xdo=None, crop=None, screen=None):
     scen = os.path.join(home, "scenario.json")
     flag = os.path.join(home, "ready")
     json.dump(scenario, open(scen, "w", encoding="utf-8"), ensure_ascii=False)
-    env = _env(home, scen, flag)
+    env = _env(home, scen, flag, scale)
     disp = ":%d" % (60 + int(key[:4], 16) % 200)
-    xv = subprocess.Popen(["Xvfb", disp, "-screen", "0", f"{SCREEN[0]}x{SCREEN[1]}x24", "-nolisten", "tcp"],
+    xv = subprocess.Popen(["Xvfb", disp, "-screen", "0", f"{SCREEN[0] * scale}x{SCREEN[1] * scale}x24", "-nolisten", "tcp"],
                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     env["DISPLAY"] = disp
     time.sleep(1.5)
@@ -266,13 +332,13 @@ def kshot(scenario, xdo=None, crop=None, screen=None):
             if cmd.startswith("sleep"):
                 time.sleep(float(cmd.split()[1]))
             else:
-                subprocess.run(["xdotool"] + cmd.split(), env=env, check=False)
+                subprocess.run(["xdotool"] + _scale_cmd(cmd, scale), env=env, check=False)
                 time.sleep(0.4)
         time.sleep(1.0)
         raw = os.path.join(home, "raw.png")
         subprocess.run(["import", "-window", "root", raw], env=env, check=True)
         if crop:
-            x, y, w, h = crop
+            x, y, w, h = [v * scale for v in crop]
             subprocess.run(["convert", raw, "-crop", f"{w}x{h}+{x}+{y}", "+repage", png], check=True)
         else:
             shutil.copy(raw, png)
