@@ -1,5 +1,15 @@
 """Готові покрокові скріни Google Документів для колод 5–6 класу. Номери на скрінах = номери кроків на слайді."""
 from gdocs import Doc, INSERT, IMAGE_SUB, BREAK_SUB, FILE, DOWNLOAD_SUB, TABLE_CTX, WRAP
+import gdocs_spravzhni as R
+
+# Спершу беремо СПРАВЖНІЙ скрін Google Документів (gdocs_spravzhni.py, знято в Chrome учителя з українським
+# інтерфейсом). Намальований у HTML (Doc нижче) — лише запасний варіант, якщо справжнього для цього випадку ще немає.
+REAL_LISTS = {("bullet", "рюкзак"): "list-bullet-pokhid", ("number", "Збір о 8:00 біля школи"): "list-number-pokhid",
+              ("bullet", "два яйця"): "list-bullet-mlyntsi", ("number", "Збити яйця з цукром"): "list-number-mlyntsi"}
+
+
+def _real(key, nums):
+    return R.real(key, nums) if key in R.SHOT else None
 
 
 
@@ -22,6 +32,8 @@ CLUBS = [["Понеділок", "футбол", "16:00", "спортзал"], ["
 
 def insert_table(cols=4, rows=6, title="Гуртки — Прізвище", heading="Розклад гуртків", nums=None):
     """Вставити → Таблиця → обводимо сітку."""
+    if (cols, rows) in ((4, 6), (3, 5)):
+        return _real(f"tabl{cols}x{rows}", nums)
     g = Doc(title=title)
     g.page(g.p(heading, bold=True, size=16) + g.p("", caret=True))
     g.menu_bar_open("Вставити", INSERT, sub="Таблиця", sub_html=Doc.table_grid(cols, rows))
@@ -33,6 +45,8 @@ def insert_table(cols=4, rows=6, title="Гуртки — Прізвище", head
 
 def table_row_below(rows=None, at=(5, 0), nums=None):
     """Права кнопка в рядку п’ятниці → «Вставити рядок нижче»."""
+    if rows is None and at == (5, 0):
+        return _real("tablrow", nums)
     rows = rows or [CLUBS_HEAD] + CLUBS
     g = Doc(title="Гуртки — Прізвище")
     g.page(g.p("Розклад гуртків", bold=True, size=16)
@@ -45,6 +59,8 @@ def table_row_below(rows=None, at=(5, 0), nums=None):
 
 def table_col_right(rows=None, at=(2, 3), nums=None):
     """Права кнопка в стовпці «Кабінет» → «Вставити стовпець справа»."""
+    if rows is None:
+        return _real("tablcol", nums)
     rows = rows or [CLUBS_HEAD] + CLUBS
     g = Doc(title="Гуртки — Прізвище")
     g.page(g.p("Розклад гуртків", bold=True, size=16)
@@ -58,6 +74,7 @@ def table_col_right(rows=None, at=(2, 3), nums=None):
 
 def table_head_bold(nums=None):
     """Виділили шапку → B (жирний)."""
+    return _real("tablbold", nums)
     g = Doc(title="Гуртки — Прізвище")
     g.on.add("bold")
     g.page(g.p("Розклад гуртків", bold=True, size=16)
@@ -72,6 +89,7 @@ def table_head_bold(nums=None):
 
 def merge_cells(nums=None):
     """Виділили дві клітинки «Понеділок» → права кнопка → «Об’єднати клітинки»."""
+    return _real("obyednaty", nums)
     rows = [["<b>День</b>", "<b>Хто чергує</b>", "<b>Що робить</b>"], ["Понеділок", "Коваль", "витирає дошку"],
             ["Понеділок", "Мороз", "поливає квіти"], ["Вівторок", "Ткач", "витирає дошку"]]
     g = Doc(title="Чергування — Прізвище", page_x=420)
@@ -84,6 +102,7 @@ def merge_cells(nums=None):
 
 def format_toolbar(nums=None):
     """Де на панелі шрифт, розмір, B I U і колір (виділено слово «Кіт»)."""
+    return _real("panel-format", nums)
     g = Doc(title="Мій вихідний — Прізвище", page_x=420)
     g.page(g.p("Мій кіт любить спати на підвіконні.".replace("кіт", '<span class="sel">кіт</span>')))
     g.mark("#page .sel", _n(nums, 0), side="bottom", pad=3)
@@ -106,13 +125,14 @@ def page_break(nums=None):
 
 
 def insert_image_web(title="Хом’як — Прізвище", heading="Хом’як удома", text=HAMSTER_TEXT, nums=None):
-    """Вставити → Зображення → Пошук в Інтернеті."""
+    """Вставити → Зображення → Шукати в Інтернеті."""
+    return _real("zobr-autumn" if "Ярмарок" in title else "zobr", nums)
     g = Doc(title=title)
     g.page(g.p(heading, bold=True, size=20, align="center") + g.p('<span class="caret"></span>' + text))
-    g.menu_bar_open("Вставити", INSERT, sub="Зображення", sub_items=IMAGE_SUB, sub_hl="Пошук в Інтернеті")
+    g.menu_bar_open("Вставити", INSERT, sub="Зображення", sub_items=IMAGE_SUB, sub_hl="Шукати в Інтернеті")
     g.mark("[data-top='Вставити']", _n(nums, 0), side="top")
     g.mark("#dd-main [data-item='Зображення']", _n(nums, 1), side="left")
-    g.mark("#dd-sub [data-item='Пошук в Інтернеті']", _n(nums, 2), side="bottom", pad=2)
+    g.mark("#dd-sub [data-item='Шукати в Інтернеті']", _n(nums, 2), side="bottom", pad=2)
     return g.shot("zobr", crop=["[data-top='Вставити']", "#dd-sub"], pad=10)
 
 
@@ -128,6 +148,8 @@ def image_corner(art="hamster", title="Хом’як — Прізвище", nums
 
 def image_selected(art="hamster", w=300, h=225):
     """Просто виділене фото з маркерами — без позначок."""
+    if art == "hamster":
+        return _real("vydil-hamster", False)
     g = Doc(title="Хом’як — Прізвище")
     g.page(g.p(g.image(art, w, h, selected=True)) + g.p(HAMSTER_TEXT))
     return g.shot(f"vydil-{art}", crop=["#img1"], pad=34)
@@ -135,6 +157,8 @@ def image_selected(art="hamster", w=300, h=225):
 
 def wrap_bar(on="wrap", tip="wrap", art="hamster", title="Хом’як — Прізвище", mode=None, text=HAMSTER_TEXT, nums=None):
     """Клацнули по фото — під ним панель обтікання; позначено потрібну кнопку."""
+    if on == "wrap" and tip == "wrap":
+        return _real("wrap-autumn" if art == "landscape" else "wrap-hamster", nums)
     mode = mode or {"inline": "inline", "wrap": "wrap", "break": "break"}.get(on, "wrap")
     g = Doc(title=title, page_w=640)
     img = g.image(art, 200, 150, selected=True, mode=mode, wrapbar=True, wrap_on=on)
@@ -148,6 +172,9 @@ def wrap_bar(on="wrap", tip="wrap", art="hamster", title="Хом’як — Пр
 
 def lists(kind="bullet", items=("рюкзак", "спальник", "ліхтарик", "вода"), nums=None):
     """Виділили рядки → кнопка «Маркований» або «Нумерований список»."""
+    key = REAL_LISTS.get((kind, items[0]))
+    if key:
+        return _real(key, nums)
     g = Doc(title="Похід — Прізвище", page_x=760)
     g.on.add(kind)
     body = "".join(g.p(t, sel=True) for t in items)
@@ -162,6 +189,8 @@ def lists(kind="bullet", items=("рюкзак", "спальник", "ліхта�
 
 def align(which="format_align_center", nums=None):
     """Кнопка вирівнювання → вибираємо варіант."""
+    if which == "format_align_center":
+        return _real("align-center", nums)
     from gdocs import ALIGN
     g = Doc(title="Оголошення — Прізвище", page_x=700)
     g.page(g.p("Оголошення", bold=True, size=20, sel=True) + g.p("У суботу о 10:00 у шкільному дворі — толока."))
@@ -176,6 +205,8 @@ def align(which="format_align_center", nums=None):
 
 def font_size(size=20, nums=None):
     """Виділили заголовок → розмір у полі між «−» і «+» → B → по центру."""
+    if size == 20:
+        return _real("shryft20", nums)
     g = Doc(title="Хом’як — Прізвище", size=size, page_x=380)
     g.on.update({"bold"})
     g.page(g.p("Хом’як удома", bold=True, size=size, sel=True) + g.p(HAMSTER_TEXT))
@@ -187,6 +218,8 @@ def font_size(size=20, nums=None):
 
 
 def line_spacing(on="1,5", nums=None):
+    if on == "1,5":
+        return _real("interval1,5", nums)
     g = Doc(title="Заява — Прізвище", page_x=560)
     g.page(g.p("Прошу дозволити мені взяти участь", sel=True) + g.p("у шкільній виставці малюнків.", sel=True))
     g.button_menu("spacing", Doc.spacing_menu(on), min_w=180)
@@ -199,6 +232,8 @@ def line_spacing(on="1,5", nums=None):
 
 def page_setup(orient="landscape", nums=None):
     """Файл → Налаштування сторінки → Альбомна → OK."""
+    if orient == "landscape":
+        return _real("nalasht-landscape", nums)
     g = Doc(title="Розклад — Прізвище")
     g.page(g.p("Розклад уроків", bold=True, size=16))
     g.page_setup(orient)
@@ -209,6 +244,7 @@ def page_setup(orient="landscape", nums=None):
 
 def file_page_setup(nums=None):
     """Файл → Налаштування сторінки (саме меню)."""
+    return _real("file-nalasht", nums)
     g = Doc(title="Розклад — Прізвище")
     g.page(g.p("Розклад уроків", bold=True, size=16))
     g.menu_bar_open("Файл", FILE, hl="Налаштування сторінки")
@@ -219,6 +255,7 @@ def file_page_setup(nums=None):
 
 def download_pdf(nums=None):
     """Файл → Завантажити → Документ PDF (.pdf)."""
+    return _real("pdf", nums)
     g = Doc(title="Шпаргалка — Прізвище")
     g.page(g.p("Шпаргалка з теми «Текстові документи»", bold=True, size=14))
     g.menu_bar_open("Файл", FILE, sub="Завантажити", sub_items=DOWNLOAD_SUB, sub_hl="Документ PDF (.pdf)")
@@ -236,14 +273,15 @@ if __name__ == "__main__":
 
 # ---------- готові слайди, що повторюються в колодах 5 і 6 класу ----------
 def slide_wrap(d, keys, ours, notes, art="hamster", title="Де це в Google Документах", text=HAMSTER_TEXT):
-    """Слайд «Де це в Google Документах»: справжній вигляд панелі під фото + розшифровка значків.
+    """Слайд «Де це в Google Документах»: справжній скрін меню обтікання під фото + розшифровка значків.
     keys — які кнопки пояснюємо (з WRAP), ours — як ці варіанти звуться на уроці."""
     from gdocs import wrap_icon
     from deck import INK2
     s = d.slide(title, notes)
     s.h2(title)
-    s.gsteps(["Клацніть по фото.", "На панелі під ним — потрібна кнопка."], x=128, y=220, w=900, size=30)
-    s.gshot(128, 340, 900, wrap_bar("wrap", "wrap", art=art, text=text), maxh=600)
+    s.gsteps(["Клацніть по фото.", "Під фото — кнопка з трикутником <b>▾</b>.", "Виберіть, як стоїть фото."],
+             x=128, y=200, w=900, size=28, gap=10)
+    s.gshot(128, 380, 900, wrap_bar("wrap", "wrap", art=art, text=text), maxh=640)
     labels = dict(WRAP)
     hh = 166 if len(keys) <= 3 else 140
     for k, key in enumerate(keys):

@@ -31,7 +31,7 @@ def panel(d):
 
 patch_deck(P5, after="Форматування: що можна змінити", build=panel,
            fixes=[("Ж жирний, К курсив, П підкреслений", "B жирний, I курсив, U підкреслений"),
-                  ("тисну Ж і потім друкую", "тисну B і потім друкую")])
+                  ("тисну Ж і потім друкую", "тисну B і потім друкую")], replace=True)
 
 
 # ---------- 6 клас, І-07-08 ----------
@@ -94,9 +94,9 @@ fixes6 = [("Вставлення → Таблиця", "Вставити → Та
           ('color:#2F3033;">Вставлення</p>', 'color:#2F3033;">Вставити</p>'), ("Вставлення  →  Таблиця", "Вставити  →  Таблиця"),
           ("Вставити стовпець ліворуч", "Вставити стовпець зліва"), ("Вставити стовпець праворуч", "Вставити стовпець справа")]
 patch_deck(P6, fixes=fixes6)
-patch_deck(P6, after="Скільки яєць? Що робити третім?", build=lists)
-patch_deck(P6, after="Таблицю не малюють, а вставляють", build=table_insert)
-patch_deck(P6, after="Помилились із розміром? Нічого страшного", build=table_fix)
-patch_deck(P6, after="Об’єднання клітинок", build=merge)
+patch_deck(P6, after="Скільки яєць? Що робити третім?", build=lists, replace=True)
+patch_deck(P6, after="Таблицю не малюють, а вставляють", build=table_insert, replace=True)
+patch_deck(P6, after="Помилились із розміром? Нічого страшного", build=table_fix, replace=True)
+patch_deck(P6, after="Об’єднання клітинок", build=merge, replace=True)
 print(P5)
 print(P6)

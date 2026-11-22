@@ -10,7 +10,8 @@
     запуск нічого не дублює);
   * перенумеровує id="N" і «Slide N of T» (навігація рушія йде за порядком секцій);
   * дописує записи в JSON deck-motion (по одному на новий слайд);
-  * fixes — заміни тексту по всьому файлу (наприклад, назви пунктів меню).
+  * fixes — заміни тексту по всьому файлу (наприклад, назви пунктів меню);
+  * replace=True — якщо слайди з такими назвами вже є, перезібрати їх на місці (напр. після нових скрінів).
 Кліки-появи (s.frame) у вставлених слайдах не підтримано: їхні id перетнулися б з наявними.
 """
 import json
@@ -19,7 +20,7 @@ import re
 from deck import Deck
 
 
-def patch_deck(path, after=None, build=None, fixes=(), kind="info", topic=""):
+def patch_deck(path, after=None, build=None, fixes=(), kind="info", topic="", replace=False):
     html = open(path, encoding="utf-8").read()
     for old, new in fixes:
         html = html.replace(old, new)
@@ -35,13 +36,23 @@ def patch_deck(path, after=None, build=None, fixes=(), kind="info", topic=""):
         pre = body[:starts[0]]
         labels = [re.search(r'data-label="([^"]*)"', s).group(1) for s in secs]
         new_labels = [s.label for s in d.slides]
-        if not any(l in labels for l in new_labels):
+        m = re.search(r'(<script type="application/json" id="deck-motion">)(.*?)(</script>)', head, flags=re.S)
+        if replace and all(l in labels for l in new_labels):
+            for s in d.slides:
+                assert not s.frames, "у вставлених слайдах не можна s.frame()"
+            motion = json.loads(m.group(2))
+            for s in d.slides:
+                k = labels.index(s.label)
+                secs[k] = s.render(0) + "\n"
+                motion["slides"][k] = s.motion()
+            mj = json.dumps(motion, ensure_ascii=False, separators=(",", ":"))
+            head = head[:m.start(2)] + mj + head[m.end(2):]
+        elif not any(l in labels for l in new_labels):
             for s in d.slides:
                 assert not s.frames, "у вставлених слайдах не можна s.frame()"
             k = labels.index(after) + 1
             new_secs = [s.render(0) + "\n" for s in d.slides]
             secs = secs[:k] + new_secs + secs[k:]
-            m = re.search(r'(<script type="application/json" id="deck-motion">)(.*?)(</script>)', head, flags=re.S)
             motion = json.loads(m.group(2))
             motion["slides"][k:k] = [s.motion() for s in d.slides]
             mj = json.dumps(motion, ensure_ascii=False, separators=(",", ":"))

@@ -49,7 +49,7 @@ INSERT = [("image", "Зображення", "", True), ("table", "Таблиця
           ("article", "Вкладка", "Shift+F11", False), ("horizontal_rule", "Горизонтальна лінія", "", False),
           ("insert_page_break", "Розрив", "", True), ("bookmark", "Закладка", "", False),
           ("view_agenda", "Елементи сторінки", "", True)]
-IMAGE_SUB = [("upload", "Завантажити з комп’ютера", "", False), ("travel_explore", "Пошук в Інтернеті", "", False),
+IMAGE_SUB = [("upload", "Завантажити з комп’ютера", "", False), ("travel_explore", "Шукати в Інтернеті", "", False),
              ("add_to_drive", "Диск", "", False), ("photo_library", "Фото", "", False),
              ("link", "За URL-адресою", "", False), ("photo_camera", "Камера", "", False)]
 BREAK_SUB = [("insert_page_break", "Розрив сторінки", "Ctrl+Enter", False),
@@ -88,7 +88,7 @@ FORMAT = [("format_bold", "Текст", "", True), ("format_size", "Стилі �
           "—", ("format_clear", "Очистити форматування", "Ctrl+\\", False)]
 
 # Обтікання: панель під виділеним зображенням (зліва направо).
-WRAP = [("inline", "Відповідно до тексту"), ("wrap", "Обтікання текстом"), ("break", "Розрив тексту"),
+WRAP = [("inline", "У тексті"), ("wrap", "Обтікання текстом"), ("break", "Зверху й знизу"),
         ("behind", "За текстом"), ("front", "Перед текстом")]
 
 ALIGN = [("format_align_left", "Вирівняти за лівим краєм", "Ctrl+Shift+L"),
