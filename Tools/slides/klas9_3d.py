@@ -221,7 +221,7 @@ bpy.context.scene.camera = bpy.data.objects["Camera"]
 '''
 
 
-def zrazok(lesson, name, scene, png=True, anim=None, engine=None, res=(1280, 720), samples=64, stl=None):
+def zrazok(lesson, name, scene, png=True, anim=None, engine=None, res=(1280, 720), samples=64, stl=None, stl_scale=1.0):
     """Готовий зразок у «Додатки/<урок>/Зразок — name.blend» + рендер PNG (+ анімація .mp4/.gif, + .stl).
     Повертає шлях до PNG (або None). Уже зроблені файли не перебудовуємо (видаліть, щоб перезібрати)."""
     d = os.path.join(ADD_DIR, LESSON[lesson])
@@ -234,10 +234,10 @@ bpy.ops.object.select_all(action="DESELECT")
 for _o in bpy.data.objects:
     if _o.type == "MESH" and _o.name != "Підлога":
         _o.select_set(True)
-bpy.ops.wm.stl_export(filepath=r"{base}.stl", export_selected_objects=True)
+bpy.ops.export_mesh.stl(filepath=r"{base}.stl", use_selection=True, global_scale={stl_scale}, use_mesh_modifiers=True)
 '''
     need = not os.path.exists(base + ".blend") or (png and not os.path.exists(base + ".png")) or \
-        (anim and not os.path.exists(base + anim))
+        (anim and not os.path.exists(base + anim)) or (stl and not os.path.exists(base + ".stl"))
     if need:
         bmake(code, blend=base + ".blend", png=(base + ".png") if png else None,
               anim=(base + anim) if anim else None, engine=engine or ("BLENDER_EEVEE" if anim else "CYCLES"),
@@ -269,7 +269,8 @@ def zrazky_slide(d, lesson):
                 "Показуємо зразок перед самостійною роботою або для самоперевірки.")
     s.h2("Готові зразки")
     s.sub("Папка <b>Додатки / " + LESSON[lesson] + "</b>: .blend, рендер .png" +
-          (", відео .mp4" if glob.glob(os.path.join(folder, "*.mp4")) else ""))
+          (", відео .mp4" if glob.glob(os.path.join(folder, "*.mp4")) else "") +
+          (", для друку .stl" if glob.glob(os.path.join(folder, "*.stl")) else ""))
     n = min(len(pngs), 6)
     cols = n if n <= 3 else 3
     rows = (n + cols - 1) // cols
