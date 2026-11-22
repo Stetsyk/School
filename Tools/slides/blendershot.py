@@ -63,11 +63,41 @@ def view(rot=(60, 0, 45), dist=12, target=(0, 0, 0.6), persp=True):
 def shading(kind="SOLID"):
     view3d().shading.type = kind
 
-def clean():
-    """Порожня сцена без куба (камера й світло лишаються)."""
+def clean(cam=(13, -13, 9), target=(0, 0, 1)):
+    """Порожня сцена без куба. Камеру й світло лишаємо (як у стартовому файлі), але відсуваємо камеру далі, щоб
+    вона не заступала моделі на скрінах, і повертаємо її на target."""
     for o in list(bpy.data.objects):
         if o.type == "MESH":
             bpy.data.objects.remove(o, do_unlink=True)
+    look(bpy.data.objects.get("Camera"), cam, target)
+    lt = bpy.data.objects.get("Light")
+    if lt:
+        lt.location = (6, -4, 9)
+        lt.data.energy = 1500
+
+def look(obj, loc, target=(0, 0, 0)):
+    if obj is None:
+        return
+    obj.location = loc
+    d = Vector(target) - Vector(loc)
+    obj.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
+
+def ground(size=20, color="#C9CED6", name="Підлога"):
+    return add("plane", name, loc=(0, 0, 0), scale=(size / 2, size / 2, 1), color=color)
+
+def world(color=(0.78, 0.84, 0.92), strength=1.0):
+    w = bpy.context.scene.world
+    w.use_nodes = True
+    bg = next(n for n in w.node_tree.nodes if n.type == "BACKGROUND")
+    bg.inputs[0].default_value = (*color, 1)
+    bg.inputs[1].default_value = strength
+
+def sun(energy=3.5, rot=(50, 10, 30)):
+    bpy.ops.object.light_add(type="SUN", rotation=[math.radians(v) for v in rot])
+    o = bpy.context.active_object
+    o.name = "Сонце"
+    o.data.energy = energy
+    return o
 
 def select(*names):
     bpy.ops.object.select_all(action="DESELECT")
@@ -214,7 +244,7 @@ try:
         if sc.render.engine == "CYCLES":
             sc.cycles.device = "CPU"
             sc.cycles.samples = out.get("samples", 48)
-            sc.cycles.use_denoising = True
+            sc.cycles.use_denoising = False
         sc.render.resolution_x, sc.render.resolution_y = out.get("res", (1280, 720))
         sc.render.resolution_percentage = 100
         sc.render.film_transparent = False
