@@ -123,9 +123,10 @@ class Shot(Extension):
             w.addView(self.doc)
             return 1500
         if "new" in st:
-            ww, hh, name = st["new"]
+            ww, hh, name = st["new"][:3]
             self.doc = k.createDocument(ww, hh, name, "RGBA", "U8", "", 72.0)
-            self.doc.setBackgroundColor(QColor("white"))
+            # 4-й елемент "transparent" — прозоре тло полотна (як «Непрозорість тла» 0 % у вікні «Створити»)
+            self.doc.setBackgroundColor(QColor(0, 0, 0, 0) if st["new"][3:] == ["transparent"] else QColor("white"))
             w.addView(self.doc)
             return 1200
         if "tool" in st:
@@ -262,6 +263,39 @@ class Shot(Extension):
 
     def done(self):
         open(FLAG, "w").write("ok")
+        QTimer.singleShot(300, self.poll)
+
+    def poll(self):
+        """Після xdo ззовні можуть попросити зберегти документ: файл FLAG.more зі списком кроків."""
+        more = FLAG + ".more"
+        if os.path.exists(more):
+            steps = json.load(open(more, encoding="utf-8"))
+            os.remove(more)
+            for st in steps:
+                try:
+                    self.save(st)
+                except Exception as e:
+                    log("ERR", st, repr(e))
+            open(FLAG + ".more.ok", "w").write("ok")
+        QTimer.singleShot(300, self.poll)
+
+    def save(self, st):
+        from krita import InfoObject
+        doc = Krita.instance().activeDocument() or self.doc
+        doc.waitForDone()
+        if "save_kra" in st:
+            doc.setBatchmode(True)
+            ok = doc.saveAs(st["save_kra"])
+            doc.waitForDone()
+            log("save_kra", st["save_kra"], ok)
+        if "export_png" in st:
+            doc.setBatchmode(True)
+            info = InfoObject()
+            info.setProperty("alpha", True)
+            info.setProperty("compression", 6)
+            ok = doc.exportImage(st["export_png"], info)
+            doc.waitForDone()
+            log("export_png", st["export_png"], ok)
 
 
 Krita.instance().addExtension(Shot(Krita.instance()))
@@ -296,17 +330,18 @@ def _scale_cmd(cmd, k):
     return p
 
 
-def kshot(scenario, xdo=None, crop=None, screen=None, scale=1):
+def kshot(scenario, xdo=None, crop=None, screen=None, scale=1, save=None):
     """Повертає шлях до PNG зі скриншотом усього вікна Krita. crop=(x, y, w, h) — вирізати частину.
     scale=2 — чіткий скрін (Retina): екран 1366 × 768 точок знімається як 2732 × 1536 пікселів; координати в
-    сценарії, xdo і crop — у точках, як і при scale=1."""
+    сценарії, xdo і crop — у точках, як і при scale=1.
+    save=[{"save_kra": шлях}, {"export_png": шлях}] — після xdo справжня Krita зберігає документ (додатки-зразки)."""
     global SCREEN
     SCREEN = tuple(screen or SCREEN)
     os.makedirs(CACHE, exist_ok=True)
-    key = hashlib.md5(json.dumps([scenario, xdo, crop, SCREEN, PLUGIN_INIT, scale], ensure_ascii=False).encode()
+    key = hashlib.md5(json.dumps([scenario, xdo, crop, SCREEN, PLUGIN_INIT, scale, save], ensure_ascii=False).encode()
                       + b"".join(open(st["open"], "rb").read() for st in scenario if "open" in st)).hexdigest()[:16]
     png = os.path.join(CACHE, "krita-" + key + ".png")
-    if os.path.exists(png):
+    if os.path.exists(png) and not save:
         return png
     home = tempfile.mkdtemp(prefix="kshot-")
     scen = os.path.join(home, "scenario.json")
@@ -335,6 +370,13 @@ def kshot(scenario, xdo=None, crop=None, screen=None, scale=1):
                 subprocess.run(["xdotool"] + _scale_cmd(cmd, scale), env=env, check=False)
                 time.sleep(0.4)
         time.sleep(1.0)
+        if save:
+            json.dump(save, open(flag + ".more", "w", encoding="utf-8"), ensure_ascii=False)
+            t0 = time.time()
+            while not os.path.exists(flag + ".more.ok"):
+                if time.time() - t0 > 90:
+                    raise RuntimeError("Krita не зберегла файл: " + open(flag + ".log").read()[-800:])
+                time.sleep(0.5)
         raw = os.path.join(home, "raw.png")
         subprocess.run(["import", "-window", "root", raw], env=env, check=True)
         if crop:

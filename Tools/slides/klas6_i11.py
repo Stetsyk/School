@@ -360,6 +360,10 @@ for k, q in enumerate(qs):
     s.box(128, y, 1664, 190, ["light", "blue", "orange"][k])
     s.text(168, y, 1584, 190, q, size=34, valign="center", lh=1.35)
 
+# передостанній — готові зразки (файли Krita з «Додатків»)
+from krita_dodatky6 import zrazky_slide
+zrazky_slide(d, "І-11")
+
 # останній слайд — як оцінюємо
 d.rubric([("Піксельний диктант", "сердечко без зайвих клітинок", "1"),
           ("Я — векторний файл", "будиночок, 4 фігури", "2"),
