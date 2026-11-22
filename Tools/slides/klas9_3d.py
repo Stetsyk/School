@@ -298,3 +298,21 @@ def render_img(s, x, y, w, png, h=None, label=None):
     if label:
         s.text(x, y + hh + 8, w, 44, label, size=24, color=INK2, align="center")
     return hh
+
+PYRAMID = '''
+clean(cam=(13, -13, 8.5), target=(0, 0, 2.4))
+_cols = ["#E8772E", "#2F6FB7", "#4E8F4A", "#D9342B", "#F7CE46", "#8C5BB5"]
+for _i, (_x, _z) in enumerate([(-2.1, 1), (0, 1), (2.1, 1), (-1.05, 3.05), (1.05, 3.05), (0, 5.1)]):
+    add("cube", "Куб %d" % (_i + 1), loc=(_x, 0, _z), color=_cols[_i])
+'''
+STAIRS = '''
+clean(cam=(15, -12, 9), target=(3, 0, 2.6))
+_n = 0
+for _x, _h in [(0, 1), (2.05, 2), (4.1, 3), (6.15, 4)]:
+    for _k in range(_h):
+        _n += 1
+        add("cube", "Сходинка %d" % _n, loc=(_x, 0, 1 + 2.05 * _k), color=["#E8772E", "#2F6FB7", "#4E8F4A", "#D9342B"][_k])
+'''
+TOOL_MOVE = '\nbpy.ops.wm.tool_set_by_id(name="builtin.move")\n'
+TOOL_SCALE = '\nbpy.ops.wm.tool_set_by_id(name="builtin.scale")\n'
+TOOL_ROTATE = '\nbpy.ops.wm.tool_set_by_id(name="builtin.rotate")\n'
