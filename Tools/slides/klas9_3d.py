@@ -56,7 +56,7 @@ for i, x in enumerate((-1.6, 1.6)):
 '''
 
 SNOWMAN = '''
-clean(cam=(8, -8, 5.5), target=(0, 0, 1.7))
+clean(cam=(8.6, -8.6, 5.0), target=(0, 0, 2.15))
 add("uv_sphere", "Низ", loc=(0, 0, 1.0), scale=(1, 1, 1), color="#FFFFFF", segments=48, ring_count=24)
 add("uv_sphere", "Середина", loc=(0, 0, 2.45), scale=(0.7, 0.7, 0.7), color="#FFFFFF", segments=48, ring_count=24)
 add("uv_sphere", "Голова", loc=(0, 0, 3.45), scale=(0.45, 0.45, 0.45), color="#FFFFFF", segments=48, ring_count=24)

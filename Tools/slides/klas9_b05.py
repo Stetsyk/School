@@ -12,7 +12,7 @@ P_BENCH = K.zrazok(L, "лава з примітивів (домашнє завд
 
 V = 'view(rot=(64, 0, 35), dist=16, target=(0, 0, 2.6))\n'
 MOVE = bk(K.PYRAMID + 'select("Куб 6")\n' + V + K.TOOL_MOVE, ["mousemove 700 650"], layout="row",
-          parts=[(0, 90, 60, 440), (330, 100, 900, 480), (1170, 380, 1366, 625)],
+          parts=[(0, 146, 60, 222), (360, 110, 720, 340), (1170, 388, 1366, 466)],
           marks=[box(TOOL["Перемістити"], "right"), (553, 138, 573, 178, "right"), (1176, 396, 1306, 458, "left")])
 FIELDS = bk(K.PYRAMID + 'select("Куб 6")\n' + V, [AWAY], parts=[(1132, 56, 1366, 470)],
             marks=[orow(7, "left"), (1176, 396, 1306, 458, "left"), (1242, 438, 1306, 458, "bottom")])
