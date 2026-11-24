@@ -37,7 +37,23 @@ sudo reboot
 
 ## Корисне для слабких ПК
 
-- **zram** (на Mint): `sudo apt install zram-tools` — найкращий виграш на 2–4 ГБ.
+- **zram** — стиснена пам'ять, найкращий виграш на 2–4 ГБ. На Ubuntu його вмикає `ubuntu-to-xfce.sh`, а на **Mint XFCE** — вручну, один раз на кожному ПК (див. нижче).
+
+## zram на Linux Mint XFCE
+
+У терміналі:
+
+```
+sudo apt install zram-tools
+printf "ALGO=zstd\nPERCENT=50\n" | sudo tee /etc/default/zramswap
+echo "vm.swappiness=100" | sudo tee /etc/sysctl.d/99-zram.conf
+sudo systemctl restart zramswap
+sudo sysctl -p /etc/sysctl.d/99-zram.conf
+```
+
+Що це дає: половина RAM стає стисненим «запасом» (zstd стискає приблизно втричі), тож 2 ГБ поводяться як 3–4 ГБ, і комп'ютер не так гальмує, коли відкрито Chrome із кількома вкладками. `swappiness=100` каже системі охочіше користуватися цим швидким запасом замість повільного диска.
+
+Перевірити, що працює: `swapon --show` — у списку має бути `/dev/zram0`. Після перезавантаження вмикається сам.
 - Браузер: 1–2 вкладки, без важких сайтів.
 - **SSD** замість старого жорсткого диска — найбільше пришвидшення.
 - Полегшення VS Code і Chrome — [[Полегшення VS Code і Chrome]].
